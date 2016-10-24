@@ -26,8 +26,8 @@ const urlBase64ToUint8Array = (base64String) => {
 };
 
 // Register a Service Worker.
-navigator.serviceWorker.register('/service-worker.js')
-  .then(registration => registration.pushManager.getSubscription()
+navigator.serviceWorker.register('/service-worker.js');
+navigator.serviceWorker.ready.then(registration => registration.pushManager.getSubscription()
     .then((subscription) => {
       // If a subscription was found, return it.
       if (subscription) return subscription;
