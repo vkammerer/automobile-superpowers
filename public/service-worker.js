@@ -1,5 +1,5 @@
 importScripts('/cached/scripts/sw-toolbox.js');
-toolbox.precache(['/index.html']);
+toolbox.precache(['/']);
 toolbox.router.get('/cached', toolbox.networkFirst);
 
 // Register event listener for the 'push' event.
