@@ -1,0 +1,6 @@
+{
+  "name": "Automobile Superpowers",
+  "short_name": "automobile-superpowers",
+  "start_url": "./index.html",
+  "display": "standalone"
+}
