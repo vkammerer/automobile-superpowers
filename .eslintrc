@@ -6,6 +6,9 @@
     "worker": true,
     "serviceworker": true
   },
+  "globals": {
+    "toolbox": true
+  },
   "rules": {
     "no-warning-comments": 0,
     "global-require": 0

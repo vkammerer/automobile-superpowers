@@ -20,6 +20,7 @@
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "superagent": "^2.3.0",
+    "sw-toolbox": "^3.4.0",
     "web-push": "^3.1.0"
   },
   "devDependencies": {
