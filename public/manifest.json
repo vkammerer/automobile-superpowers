@@ -1,10 +1,10 @@
 {
   "name": "Automobile Superpowers",
-  "short_name": "automobile-superpowers",
+  "short_name": "Auto SP",
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#FF0000",
-  "background_color": "#7CC92F",
+  "background_color": "#FFFFFF",
+  "theme_color": "#7CC92F",
   "icons": [
     {
       "src": "./cached/images/icon-192x192.png",

@@ -7,10 +7,13 @@
     "serviceworker": true
   },
   "globals": {
-    "toolbox": true
+    "toolbox": true,
+    "moment": true
   },
   "rules": {
     "no-warning-comments": 0,
-    "global-require": 0
+    "global-require": 0,
+    "arrow-parens": ["error", "as-needed"],
+    "curly": ["error", "multi"]
   }
 }
