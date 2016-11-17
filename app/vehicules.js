@@ -1,9 +1,9 @@
 const request = require('superagent');
 const moment = require('moment');
 const { superPromise } = require('./promise');
-const { sendVehiculeNotification } = require('./push');
-const { sortVehicules } = require('./sort');
 const { users } = require('./users');
+const { sendSubscriptionNotification, sendVehiculeNotification } = require('./push');
+const { sortVehicules } = require('./sort');
 
 const URI = 'https://www.reservauto.net/WCF/LSI/LSIBookingService.asmx/GetVehicleProposals';
 const PING_INTERVAL_SECONDS = 15;
@@ -29,29 +29,40 @@ const fetchVehicules = ({ lat, lng }) => {
 
 const shouldSendNotification = (user, vehicules) => {
   const currentVehicules = users[user.id].vehicules;
-  return !!(currentVehicules && currentVehicules[0].distance > vehicules[0].distance);
+  return !!(
+    currentVehicules &&
+    currentVehicules.data.length > 0 &&
+    currentVehicules.data[0].distance > vehicules[0].distance
+  );
 };
 
 const checkVehicules = userId => {
   const user = users[userId];
-  if (user.timeout) clearTimeout(user.subscription.timeout);
-  fetchVehicules(user.position)
+  if (user.subscriptionnn.timeout) clearTimeout(user.subscriptionnn.timeout);
+  return fetchVehicules(user.position)
     .then(vehicules => {
-      if (!user.subscription) return null;
+      if (!user.subscriptionnn) return null;
       const mustSendNotification = shouldSendNotification(user, vehicules);
       console.log(mustSendNotification, vehicules[0].distance);
-      user.vehicules = vehicules;
+      user.vehicules.data = vehicules;
       if (mustSendNotification) sendVehiculeNotification(userId);
-      const timeDiff = moment().diff(user.subscription.time, 'minutes');
+      const timeDiff = moment().diff(user.subscriptionnn.time, 'minutes');
       if (timeDiff < PING_DURATION_MINUTES)
-        return (user.subscription.timeout = setTimeout(() => {
+        return (user.subscriptionnn.timeout = setTimeout(() => {
           checkVehicules(userId);
         }, PING_INTERVAL_SECONDS * 1000));
-      return (user.vehicules = undefined);
+      return (user.vehicules.data = []);
     });
+};
+
+const listenToVehicules = userId => {
+  const user = users[userId];
+  user.subscriptionnn.time = new Date();
+  checkVehicules(userId);
+  sendSubscriptionNotification(userId);
 };
 
 module.exports = {
   fetchVehicules,
-  checkVehicules,
+  listenToVehicules,
 };

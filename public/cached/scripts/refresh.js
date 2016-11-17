@@ -4,7 +4,5 @@
     document.querySelector('iframe').src = 'https://www.reservauto.net/Scripts/Client/Mobile/Default.asp?BranchID=1';
   };
 
-  window.AuSu.refresh = {
-    refreshIframe,
-  };
+  document.querySelector('#refreshButton').onclick = refreshIframe;
 })();

@@ -30,6 +30,9 @@ app.all('*', (req, res, next) => {
   ) return res.sendFile(path.join(__dirname, 'public', 'auth.html'));
   return next();
 });
+app.get('/cached/scripts/redux.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'node_modules', 'redux', 'dist', 'redux.js'));
+});
 app.get('/cached/scripts/sw-toolbox.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'node_modules', 'sw-toolbox', 'sw-toolbox.js'));
 });

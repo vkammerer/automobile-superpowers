@@ -1,44 +1,52 @@
 const { users } = require('./users');
-const { fetchVehicules, checkVehicules } = require('./automobile');
-const { sendConfirmationNotification } = require('./push');
+const { listenToVehicules, fetchVehicules } = require('./vehicules');
+const { startAlarm } = require('./alarm');
 
 const initApi = app => {
   app.post('/api/location', (req, res) => {
     const user = users[req.cookies.user];
     const { lat, lng } = req.body;
     user.position = { lat, lng };
-    res.json({ lat, lng });
+    return res.json({ lat, lng });
   });
   app.get('/api/vehicules', (req, res) => {
     const user = users[req.cookies.user];
-    return fetchVehicules(user.position)
-      .then(vehicules => {
-        user.vehicules = vehicules;
-        res.json(vehicules);
-      });
-  });
-  app.post('/api/subscribe', (req, res) => {
-    const user = users[req.cookies.user];
-    user.subscription = {
-      pushSubscription: {
-        endpoint: req.body.endpoint,
-        keys: {
-          p256dh: req.body.key,
-          auth: req.body.authSecret,
-        },
-      },
-      time: new Date(),
-    };
-    checkVehicules(req.cookies.user);
-    sendConfirmationNotification(req.cookies.user).then(() => {
-      res.json(user.subscription);
+    return fetchVehicules(user.position).then(vehicules => {
+      user.vehicules.data = vehicules;
+      res.json(vehicules);
     });
   });
-  app.get('/api/unsubscribe', (req, res) => {
+  app.get('/api/alarm', (req, res) => {
     const user = users[req.cookies.user];
-    clearTimeout(user.subscription.timeout);
-    user.subscription = null;
-    res.sendStatus(200);
+    return res.json({ time: user.alarmmm.time });
+  });
+  app.post('/api/alarm', (req, res) => {
+    const user = users[req.cookies.user];
+    const { active, pushAuth } = req.body;
+    user.pushAuth = pushAuth;
+    if (!active) {
+      clearTimeout(user.alarmmm.timeout);
+      user.alarmmm.time = null;
+      return res.json({ time: user.alarmmm.time });
+    }
+    startAlarm(req.cookies.user);
+    return res.json({ time: user.alarmmm.time });
+  });
+  app.post('/api/subscription', (req, res) => {
+    const user = users[req.cookies.user];
+    const { active, pushAuth } = req.body;
+    user.pushAuth = pushAuth;
+    if (!active) {
+      clearTimeout(user.subscriptionnn.timeout);
+      user.subscriptionnn.time = null;
+      return res.json({ time: user.subscriptionnn.time });
+    }
+    listenToVehicules(req.cookies.user);
+    return res.json({ time: user.subscriptionnn.time });
+  });
+  app.get('/api/subscription', (req, res) => {
+    const user = users[req.cookies.user];
+    return res.json({ time: user.subscriptionnn.time });
   });
 };
 

@@ -2,43 +2,62 @@
   const ALARM_DURATION_MINUTES = 29;
   const alarmContentDiv = document.querySelector('#alarmContent');
 
-  const updateAlarmTime = () => {
-    const timeDiff = ALARM_DURATION_MINUTES - moment().diff(window.AuSu.data.alarm.time, 'minutes');
-    if (window.AuSu.data.alarm.timeout)
-      clearTimeout(window.AuSu.data.alarm.timeout);
-    if (timeDiff > 0) {
-      window.AuSu.data.alarm.timeout = setTimeout(updateAlarmTime, 60000);
-      alarmContentDiv.innerHTML = `Still <strong>${timeDiff} minutes</strong>`;
-    } else {
-      document.body.classList.remove('alarmed');
-      alarmContentDiv.innerHTML = 'No active alarm';
-    }
+  let timeout;
+
+  const updateAlarm = () => {
+    const s = window.AuSu.store.getState();
+    const methodName = s.alarmmm.time
+      ? 'add'
+      : 'remove';
+    const timeDiff = !s.alarmmm.time
+      ? null
+      : ALARM_DURATION_MINUTES - moment().diff(s.alarmmm.time, 'minutes');
+    const innerHTML = s.alarmmm.time
+      ? `Still <strong>${timeDiff} minutes</strong>`
+      : 'No active alarm';
+    alarmContentDiv.innerHTML = innerHTML;
+    document.body.classList[methodName]('alarmed');
+    if (timeout) clearTimeout(timeout);
+    if (timeDiff > 0) timeout = setTimeout(updateAlarm, 60000);
   };
 
-  const setAlarm = () => {
-    const data = {
-      type: 'alarm',
-      timer: ALARM_DURATION_MINUTES,
-    };
-    navigator.serviceWorker.controller.postMessage(JSON.stringify(data));
-    window.AuSu.data.alarm = { time: new Date() };
-    document.body.classList.add('alarmed');
-    updateAlarmTime();
+  document.querySelector('#alarmButton').onclick = () => {
+    const s = window.AuSu.store.getState();
+    fetch('./api/alarm', {
+      credentials: 'same-origin',
+      method: 'post',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({
+        active: !s.alarmmm.time,
+        pushAuth: s.mainnn.pushAuth,
+      }),
+    }).then(blob => blob.json().then(({ time }) => {
+      window.AuSu.store.dispatch({
+        type: 'ALARM',
+        time,
+      });
+    }));
   };
 
-  const unsetAlarm = () => {
-    const data = {
-      type: 'unalarm',
-    };
-    navigator.serviceWorker.controller.postMessage(JSON.stringify(data));
-    clearTimeout(window.AuSu.data.alarm.timeout);
-    window.AuSu.data.alarm = null;
-    document.body.classList.remove('alarmed');
-    alarmContentDiv.innerHTML = 'No active alarm';
+  const getAlarm = () => {
+    fetch('./api/alarm', {
+      credentials: 'same-origin',
+      method: 'get',
+      headers: { 'Content-type': 'application/json' },
+    }).then(blob => blob.json().then(({ time }) => {
+      window.AuSu.store.dispatch({
+        type: 'ALARM',
+        time,
+      });
+    }));
   };
 
-  window.AuSu.alarm = {
-    setAlarm,
-    unsetAlarm,
-  };
+  window.AuSu.store.subscribe(() => {
+    const p = window.AuSu.state;
+    if (!p) return;
+    const s = window.AuSu.store.getState();
+    if (p.alarmmm.time !== s.alarmmm.time) updateAlarm();
+  });
+
+  window.AuSu.alarmmm = { getAlarm };
 })();

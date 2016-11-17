@@ -123,12 +123,18 @@
       }
       body.alarmed #alarmButton,
       body.subscribed #subscriptionButton {
-        display: none;
-      }
-      button.actionUndo {
-        display: none;
         background: #ffe4e4;
         color: red;
+      }
+      body #alarmButton .undo,
+      body #subscriptionButton .undo,
+      body.alarmed #alarmButton .do,
+      body.subscribed #subscriptionButton .do {
+        display: none;
+      }
+      body.alarmed #alarmButton .undo,
+      body.subscribed #subscriptionButton .undo {
+        display: block;
       }
       body.alarmed #unalarmButton,
       body.subscribed #unsubscriptionButton {
@@ -182,8 +188,8 @@
     <link rel="manifest" href="manifest.json" crossOrigin="use-credentials">
   </head>
   <body>
-    <iframe src="https://www.reservauto.net/Scripts/Client/Mobile/Default.asp?BranchID=1">
-    </iframe>
+    <!--<iframe src="https://www.reservauto.net/Scripts/Client/Mobile/Default.asp?BranchID=1">
+    </iframe>-->
     <div id="superpowers">
       <main>
         <header>
@@ -191,13 +197,17 @@
         </header>
         <div id="actions">
           <section id="alarm">
-            <button id="alarmButton">Set Alarm</button>
-            <button id="unalarmButton" class="actionUndo">Unset Alarm</button>
+            <button id="alarmButton">
+              <span class="do">Set Alarm</span>
+              <span class="undo">Unset Alarm</span>
+            </button>
             <div id="alarmContent" class="actionContent">No active alarm</div>
           </section>
           <section id="subscription">
-            <button id="subscriptionButton">Subscribe</button>
-            <button id="unsubscriptionButton" class="actionUndo">Unsubscribe</button>
+            <button id="subscriptionButton">
+              <span class="do">Subscribe</span>
+              <span class="undo">Unsubscribe</span>
+            </button>
             <div id="subscriptionContent" class="actionContent">No active subscription</div>
           </section>
         </div>
@@ -208,10 +218,11 @@
       <button id="menuButton">S</button>
       <button id="refreshButton">R</button>
     </div>
-    <script>window.AuSu = { data: {} }</script>
+    <script>window.AuSu = {}</script>
     <script src="/cached/scripts/moment.js"></script>
+    <script src="/cached/scripts/redux.js"></script>
     <script src="/cached/scripts/conversion.js"></script>
-    <script src="/cached/scripts/promise.js"></script>
+    <script src="/cached/scripts/store.js"></script>
     <script src="/cached/scripts/sw.js"></script>
     <script src="/cached/scripts/location.js"></script>
     <script src="/cached/scripts/alarm.js"></script>
@@ -219,6 +230,6 @@
     <script src="/cached/scripts/refresh.js"></script>
     <script src="/cached/scripts/subscription.js"></script>
     <script src="/cached/scripts/vehicules.js"></script>
-    <script src="/cached/scripts/index.js"></script>
+    <script src="/cached/scripts/init.js"></script>
   </body>
 </html>

@@ -1,13 +1,20 @@
 (() => {
   const toggleMenu = () => {
-    const methodName = document.body.classList.contains('menued')
-      ? 'remove'
-      : 'add';
+    const s = window.AuSu.store.getState();
+    const methodName = s.mainnn.menuOpen
+      ? 'add'
+      : 'remove';
     document.body.classList[methodName]('menued');
-    if (methodName === 'add') window.AuSu.vehicules.getVehicules();
   };
 
-  window.AuSu.menu = {
-    toggleMenu,
+  document.querySelector('#menuButton').onclick = () => {
+    window.AuSu.store.dispatch({ type: 'MENU_BUTTON_CLICK' });
   };
+
+  window.AuSu.store.subscribe(() => {
+    const p = window.AuSu.state;
+    if (!p) return;
+    const s = window.AuSu.store.getState();
+    if (p.mainnn.menuOpen !== s.mainnn.menuOpen) toggleMenu();
+  });
 })();

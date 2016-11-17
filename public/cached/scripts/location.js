@@ -1,6 +1,5 @@
 (() => {
   const sendLocation = () => {
-    const sPromise = window.AuSu.promise.superPromise();
     navigator.geolocation.getCurrentPosition(position => {
       fetch('./api/location', {
         credentials: 'same-origin',
@@ -10,9 +9,10 @@
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         }),
-      }).then(blob => blob.json().then(sPromise.resolve));
+      }).then(blob => blob.json().then(location => {
+        window.AuSu.store.dispatch({ type: 'LOCATION', location });
+      }));
     });
-    return sPromise.promise;
   };
 
   window.AuSu.location = {
