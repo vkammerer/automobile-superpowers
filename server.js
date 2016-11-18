@@ -18,7 +18,9 @@ app.post('/', (req, res, next) => {
   if (
     req.body &&
     req.body.user !== process.env.USER_1 &&
-    req.body.user !== process.env.USER_2
+    req.body.user !== process.env.USER_2 &&
+    req.body.user !== process.env.USER_3 &&
+    req.body.user !== process.env.USER_4
   ) return next();
   res.cookie('user', req.body.user, cookieOptions);
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -26,7 +28,9 @@ app.post('/', (req, res, next) => {
 app.all('*', (req, res, next) => {
   if (
     req.cookies.user !== process.env.USER_1 &&
-    req.cookies.user !== process.env.USER_2
+    req.cookies.user !== process.env.USER_2 &&
+    req.cookies.user !== process.env.USER_3 &&
+    req.cookies.user !== process.env.USER_4
   ) return res.sendFile(path.join(__dirname, 'public', 'auth.html'));
   return next();
 });
