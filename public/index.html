@@ -106,13 +106,18 @@
         display: flex;
       }
       header {
-        display: block;
         text-align: center;
-        height: 32px;
-        line-height: 32px;
         background: #9c6;
-        color: white;
+      }
+      header span {
+        padding: 4px 10px;
+        display: inline-block;
+        background: #647C47;
+        color: #fff;
+        margin: 4px 2px;
+        font-size: 14px;
         font-weight: bold;
+        border-radius: 2px;
       }
       section {
         padding: 20px;
@@ -193,7 +198,6 @@
         text-align: right;
       }
     </style>
-    <!-- This is needed for Google Chrome support. -->
     <link rel="manifest" href="manifest.json" crossOrigin="use-credentials">
   </head>
   <body>
@@ -208,7 +212,7 @@
     <div id="superpowers">
       <main>
         <header>
-          Super Powers
+          <span>Super Powers</span>
         </header>
         <div id="actions">
           <section id="alarm">
