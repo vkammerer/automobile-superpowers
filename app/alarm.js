@@ -3,13 +3,11 @@ const { sendAlarmNotification } = require('./push');
 
 const startAlarm = userId => {
   const user = users[userId];
-  if (user.alarmmm && user.alarmmm.timeout) clearTimeout(user.alarmmm.timeout);
-  user.alarmmm.time = new Date();
-  user.alarmmm.timeout = setTimeout(() => {
+  if (user.alarmTimeout) clearTimeout(user.alarmTimeout);
+  user.alarmTime = new Date();
+  user.alarmTimeout = setTimeout(() => {
     sendAlarmNotification(userId);
-  }, 60 * 28 * 1000);
+  }, 60 * 29 * 1000);
 };
 
-module.exports = {
-  startAlarm,
-};
+module.exports = { startAlarm };

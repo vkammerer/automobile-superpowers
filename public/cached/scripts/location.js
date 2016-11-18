@@ -15,7 +15,5 @@
     });
   };
 
-  window.AuSu.location = {
-    sendLocation,
-  };
+  window.AuSu.location = { sendLocation };
 })();

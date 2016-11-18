@@ -6,19 +6,27 @@
 
   const updateAlarm = () => {
     const s = window.AuSu.store.getState();
-    const methodName = s.alarmmm.time
+    const methodName = s.alarmTime
       ? 'add'
       : 'remove';
-    const timeDiff = !s.alarmmm.time
+    const timeDiff = !s.alarmTime
       ? null
-      : ALARM_DURATION_MINUTES - moment().diff(s.alarmmm.time, 'minutes');
-    const innerHTML = s.alarmmm.time
+      : ALARM_DURATION_MINUTES - moment().diff(s.alarmTime, 'minutes');
+    const innerHTML = s.alarmTime
       ? `Still <strong>${timeDiff} minutes</strong>`
       : 'No active alarm';
     alarmContentDiv.innerHTML = innerHTML;
     document.body.classList[methodName]('alarmed');
     if (timeout) clearTimeout(timeout);
     if (timeDiff > 0) timeout = setTimeout(updateAlarm, 60000);
+  };
+
+  const subscribeAlarm = () => {
+    window.AuSu.store.subscribe(() => {
+      const p = window.AuSu.state;
+      const s = window.AuSu.store.getState();
+      if (p.alarmTime !== s.alarmTime) updateAlarm();
+    });
   };
 
   document.querySelector('#alarmButton').onclick = () => {
@@ -28,8 +36,8 @@
       method: 'post',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
-        active: !s.alarmmm.time,
-        pushAuth: s.mainnn.pushAuth,
+        active: !s.alarmTime,
+        pushAuth: s.pushAuth,
       }),
     }).then(blob => blob.json().then(({ time }) => {
       window.AuSu.store.dispatch({
@@ -52,12 +60,5 @@
     }));
   };
 
-  window.AuSu.store.subscribe(() => {
-    const p = window.AuSu.state;
-    if (!p) return;
-    const s = window.AuSu.store.getState();
-    if (p.alarmmm.time !== s.alarmmm.time) updateAlarm();
-  });
-
-  window.AuSu.alarmmm = { getAlarm };
+  window.AuSu.alarm = { subscribeAlarm, getAlarm };
 })();

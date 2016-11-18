@@ -45,10 +45,9 @@ const sendSubscriptionNotification = userId => {
 const sendVehiculeNotification = userId => {
   const user = users[userId];
   const sPromise = superPromise();
-  const legibleDistance = parseInt(user.vehicules.data[0].distance * 100000, 10);
   webpush.sendNotification(
     user.pushAuth,
-    `New automobile at ${legibleDistance} meters`,
+    `New automobile at ${user.vehicules[0].distance} meters`,
     pushOptions
   ).then(() => {
     sPromise.resolve();

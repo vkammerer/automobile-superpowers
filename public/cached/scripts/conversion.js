@@ -12,7 +12,5 @@
     return outputArray;
   };
 
-  window.AuSu.conversion = {
-    urlBase64ToUint8Array,
-  };
+  window.AuSu.conversion = { urlBase64ToUint8Array };
 })();

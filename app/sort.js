@@ -2,7 +2,7 @@ const sortVehicules = (vehicules, { lat, lng }) => vehicules
   .map(v => {
     const width = lat - v.Position.Lat;
     const height = lng - v.Position.Lon;
-    const distance = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
+    const distance = Math.floor(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) * 100000);
     return {
       vehicule: v,
       distance,

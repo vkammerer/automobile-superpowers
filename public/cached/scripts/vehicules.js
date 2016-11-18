@@ -3,9 +3,9 @@
 
   const updateVehicules = () => {
     const s = window.AuSu.store.getState();
-    const vehiculesHTML = s.mainnn.vehicules
+    const vehiculesHTML = s.vehicules
       .map(v => {
-        const distance = Math.floor(v.distance * 100000);
+        const distance = v.distance;
         const number = v.vehicule.Name;
         const energy = v.vehicule.EnergyLevel;
         const className = v.vehicule.ModelName === 'LEAF' ? 'vehiculeLeaf' : 'vehiculePrius';
@@ -40,12 +40,14 @@
     }));
   };
 
-  window.AuSu.store.subscribe(() => {
-    const p = window.AuSu.state;
-    if (!p) return;
-    const s = window.AuSu.store.getState();
-    if (!p.mainnn.visible && s.mainnn.visible) getVehicules();
-    if (!p.mainnn.menuOpen && s.mainnn.menuOpen) getVehicules();
-    if (p.mainnn.vehicules !== s.mainnn.vehicules) updateVehicules();
-  });
+  const subscribeVehicules = () => {
+    window.AuSu.store.subscribe(() => {
+      const p = window.AuSu.state;
+      const s = window.AuSu.store.getState();
+      if (!p.visible && s.visible) getVehicules();
+      if (!p.superOpen && s.superOpen) getVehicules();
+      if (p.vehicules !== s.vehicules) updateVehicules();
+    });
+  };
+  window.AuSu.vehicules = { subscribeVehicules };
 })();

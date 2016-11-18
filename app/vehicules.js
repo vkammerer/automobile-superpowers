@@ -7,7 +7,7 @@ const { sortVehicules } = require('./sort');
 
 const URI = 'https://www.reservauto.net/WCF/LSI/LSIBookingService.asmx/GetVehicleProposals';
 const PING_INTERVAL_SECONDS = 15;
-const PING_DURATION_MINUTES = 60;
+const PING_DURATION_MINUTES = 59;
 
 const fetchVehicules = ({ lat, lng }) => {
   const sPromise = superPromise();
@@ -29,35 +29,34 @@ const fetchVehicules = ({ lat, lng }) => {
 
 const shouldSendNotification = (user, vehicules) => {
   const currentVehicules = users[user.id].vehicules;
-  return !!(
+  return (
     currentVehicules &&
-    currentVehicules.data.length > 0 &&
-    currentVehicules.data[0].distance > vehicules[0].distance
+    currentVehicules[0] &&
+    currentVehicules[0].distance > vehicules[0].distance
   );
 };
 
 const checkVehicules = userId => {
   const user = users[userId];
-  if (user.subscriptionnn.timeout) clearTimeout(user.subscriptionnn.timeout);
+  if (user.subscriptionTimeout) clearTimeout(user.subscriptionTimeout);
   return fetchVehicules(user.position)
     .then(vehicules => {
-      if (!user.subscriptionnn) return null;
+      if (!user.subscriptionTime) return null;
       const mustSendNotification = shouldSendNotification(user, vehicules);
-      console.log(mustSendNotification, vehicules[0].distance);
-      user.vehicules.data = vehicules;
+      user.vehicules = vehicules;
       if (mustSendNotification) sendVehiculeNotification(userId);
-      const timeDiff = moment().diff(user.subscriptionnn.time, 'minutes');
+      const timeDiff = moment().diff(user.subscriptionTime, 'minutes');
       if (timeDiff < PING_DURATION_MINUTES)
-        return (user.subscriptionnn.timeout = setTimeout(() => {
+        return (user.subscriptionTimeout = setTimeout(() => {
           checkVehicules(userId);
         }, PING_INTERVAL_SECONDS * 1000));
-      return (user.vehicules.data = []);
+      return (user.vehicules = []);
     });
 };
 
 const listenToVehicules = userId => {
   const user = users[userId];
-  user.subscriptionnn.time = new Date();
+  user.subscriptionTime = new Date();
   checkVehicules(userId);
   sendSubscriptionNotification(userId);
 };

@@ -39,7 +39,5 @@
       });
   };
 
-  window.AuSu.sw = {
-    initSw,
-  };
+  window.AuSu.sw = { initSw };
 })();

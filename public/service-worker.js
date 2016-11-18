@@ -4,16 +4,17 @@
   toolbox.precache([
     '/',
     '/index.html',
+    '/cached/scripts/sw-toolbox.js',
     '/cached/scripts/redux.js',
     '/cached/scripts/moment.js',
     '/cached/scripts/alarm.js',
     '/cached/scripts/conversion.js',
-    '/cached/scripts/init.js',
+    '/cached/scripts/index.js',
     '/cached/scripts/location.js',
     '/cached/scripts/menu.js',
-    '/cached/scripts/refresh.js',
     '/cached/scripts/store.js',
     '/cached/scripts/subscription.js',
+    '/cached/scripts/super.js',
     '/cached/scripts/sw.js',
     '/cached/scripts/vehicules.js',
   ]);
@@ -34,7 +35,6 @@
     return self.registration.showNotification(title, options);
   }
 
-  // Register event listener for the 'push' event.
   self.addEventListener('push', event => {
     // Retrieve the textual payload from event.data (a PushMessageData object).
     // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation

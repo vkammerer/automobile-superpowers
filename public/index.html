@@ -20,6 +20,16 @@
         left: 0;
         width: 100%;
         height: 100%;
+        border: none;
+      }
+      #menuIframe {
+        display: none;
+      }
+      .menued #mapIframe {
+        display: none;
+      }
+      .menued #menuIframe {
+        display: block;
       }
       #superpowers {
         display: none;
@@ -31,22 +41,24 @@
         display: inline-block;
         border: 0;
         line-height: 120%;
-        padding: 4px 10px;
-        border-radius: 2px;
-        background: #647C47;
+        padding: 10px 10px;
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        background: #8dc63f;
         color: white;
-        box-shadow:none;
+        box-shadow: none;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 24px;
         outline: none;
       }
-      #menuButton,
-      #refreshButton {
+      #superButton,
+      #menuButton {
         position: absolute;
-        top: 6px;
+        right: 12px;
       }
-      #menuButton:after,
-      #refreshButton:after {
+      #superButton:after,
+      #menuButton:after {
         content: '';
         position: absolute;
         top: -6px;
@@ -54,19 +66,19 @@
         left: -6px;
         right: -6px;
       }
-      #menuButton {
-        left: 10px;
+      #superButton {
         transform: scale(1);
-        transform-origin: 0 0;
+        transform-origin: 100% 100%;
         transition: transform 150ms linear;
+        bottom: 60px;
       }
-      body.menued #menuButton {
-        transform: translate(10px, 8px) scale(2);
+      body.supered #superButton {
+        transform: scale(1.5);
       }
-      #refreshButton {
-        right: 50px;
+      #menuButton {
+        bottom: 130px;
       }
-      body.menued #refreshButton {
+      body.supered #menuButton {
         display: none;
       }
       main button {
@@ -90,20 +102,17 @@
         height: 100%;
         background: white;
       }
-      body.menued main {
+      body.supered main {
         display: flex;
       }
       header {
-        flex: 0;
         display: block;
-        color: #647C47;
         text-align: center;
-        padding-left: 40px;
-        height: 80px;
-        font-size: 1.2rem;
+        height: 32px;
+        line-height: 32px;
+        background: #9c6;
+        color: white;
         font-weight: bold;
-        line-height: 77px;
-        border-bottom: 1px solid;
       }
       section {
         padding: 20px;
@@ -188,12 +197,18 @@
     <link rel="manifest" href="manifest.json" crossOrigin="use-credentials">
   </head>
   <body>
-    <!--<iframe src="https://www.reservauto.net/Scripts/Client/Mobile/Default.asp?BranchID=1">
-    </iframe>-->
+    <iframe
+      id="mapIframe"
+      src="https://www.reservauto.net/Scripts/Client/Mobile/Default.asp"
+    ></iframe>
+    <iframe
+      id="menuIframe"
+      src="https://www.reservauto.net/Scripts/Client/Mobile/Menu.asp"
+    ></iframe>
     <div id="superpowers">
       <main>
         <header>
-          Automobile Super Powers
+          Super Powers
         </header>
         <div id="actions">
           <section id="alarm">
@@ -215,8 +230,8 @@
           <div id="vehiculesContent">Loading...</div>
         </section>
       </main>
-      <button id="menuButton">S</button>
-      <button id="refreshButton">R</button>
+      <button id="superButton">S</button>
+      <button id="menuButton">M</button>
     </div>
     <script>window.AuSu = {}</script>
     <script src="/cached/scripts/moment.js"></script>
@@ -227,9 +242,9 @@
     <script src="/cached/scripts/location.js"></script>
     <script src="/cached/scripts/alarm.js"></script>
     <script src="/cached/scripts/menu.js"></script>
-    <script src="/cached/scripts/refresh.js"></script>
+    <script src="/cached/scripts/super.js"></script>
     <script src="/cached/scripts/subscription.js"></script>
     <script src="/cached/scripts/vehicules.js"></script>
-    <script src="/cached/scripts/init.js"></script>
+    <script src="/cached/scripts/index.js"></script>
   </body>
 </html>

@@ -7,46 +7,46 @@ const initApi = app => {
     const user = users[req.cookies.user];
     const { lat, lng } = req.body;
     user.position = { lat, lng };
-    return res.json({ lat, lng });
+    return res.json(user.position);
   });
   app.get('/api/vehicules', (req, res) => {
     const user = users[req.cookies.user];
     return fetchVehicules(user.position).then(vehicules => {
-      user.vehicules.data = vehicules;
-      res.json(vehicules);
+      user.vehicules = vehicules;
+      res.json(user.vehicules);
     });
   });
   app.get('/api/alarm', (req, res) => {
     const user = users[req.cookies.user];
-    return res.json({ time: user.alarmmm.time });
+    return res.json({ time: user.alarmTime });
   });
   app.post('/api/alarm', (req, res) => {
     const user = users[req.cookies.user];
     const { active, pushAuth } = req.body;
     user.pushAuth = pushAuth;
     if (!active) {
-      clearTimeout(user.alarmmm.timeout);
-      user.alarmmm.time = null;
-      return res.json({ time: user.alarmmm.time });
+      clearTimeout(user.alarmTimeout);
+      user.alarmTime = null;
+      return res.json({ time: user.alarmTime });
     }
     startAlarm(req.cookies.user);
-    return res.json({ time: user.alarmmm.time });
+    return res.json({ time: user.alarmTime });
   });
   app.post('/api/subscription', (req, res) => {
     const user = users[req.cookies.user];
     const { active, pushAuth } = req.body;
     user.pushAuth = pushAuth;
     if (!active) {
-      clearTimeout(user.subscriptionnn.timeout);
-      user.subscriptionnn.time = null;
-      return res.json({ time: user.subscriptionnn.time });
+      clearTimeout(user.subscriptionTimeout);
+      user.subscriptionTime = null;
+      return res.json({ time: user.subscriptionTime });
     }
     listenToVehicules(req.cookies.user);
-    return res.json({ time: user.subscriptionnn.time });
+    return res.json({ time: user.subscriptionTime });
   });
   app.get('/api/subscription', (req, res) => {
     const user = users[req.cookies.user];
-    return res.json({ time: user.subscriptionnn.time });
+    return res.json({ time: user.subscriptionTime });
   });
 };
 

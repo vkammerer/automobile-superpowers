@@ -1,42 +1,26 @@
 (() => {
-  const alarmmmDefaultState = {
-    time: null,
-  };
-
-  const subscriptionnnDefaultState = {
-    time: null,
-  };
-
-  const mainnnDefaultState = {
+  const defaultState = {
+    alarmTime: null,
+    subscriptionTime: null,
     ready: false,
     menuOpen: false,
+    superOpen: false,
     location: null,
     visible: document.visibilityState === 'visible',
     vehicules: [],
   };
-  const alarmmm = (state = alarmmmDefaultState, action) => {
+
+  const app = (state = defaultState, action) => {
+    console.log(action);
     switch (action.type) {
       case 'ALARM':
         return Object.assign({}, state, {
-          time: action.time,
+          alarmTime: action.time,
         });
-      default:
-        return state;
-    }
-  };
-  const subscriptionnn = (state = subscriptionnnDefaultState, action) => {
-    switch (action.type) {
       case 'SUBSCRIPTION':
         return Object.assign({}, state, {
-          time: action.time,
+          subscriptionTime: action.time,
         });
-      default:
-        return state;
-    }
-  };
-  const mainnn = (state = mainnnDefaultState, action) => {
-    console.log(action);
-    switch (action.type) {
       case 'LOCATION': {
         return Object.assign({}, state, {
           location: action.location,
@@ -47,6 +31,10 @@
         return Object.assign({}, state, {
           pushAuth: action.pushAuth,
           ready: !!(state.ready || state.location),
+        });
+      case 'SUPER_BUTTON_CLICK':
+        return Object.assign({}, state, {
+          superOpen: !state.superOpen,
         });
       case 'MENU_BUTTON_CLICK':
         return Object.assign({}, state, {
@@ -65,11 +53,6 @@
         return state;
     }
   };
-  const app = window.Redux.combineReducers({
-    alarmmm,
-    subscriptionnn,
-    mainnn,
-  });
 
   window.AuSu.store = window.Redux.createStore(app);
   window.AuSu.state = window.AuSu.store.getState();
