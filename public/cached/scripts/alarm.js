@@ -22,42 +22,32 @@
   };
 
   const subscribeAlarm = () => {
-    window.AuSu.store.subscribe(() => {
-      const p = window.AuSu.state;
-      const s = window.AuSu.store.getState();
+    window.AuSu.utils.subscribeStore(({ p, s }) => {
       if (p.alarmTime !== s.alarmTime) updateAlarm();
     });
   };
 
-  document.querySelector('#alarmButton').onclick = () => {
+  const toggleAlarm = () => {
     const s = window.AuSu.store.getState();
-    fetch('./api/alarm', {
-      credentials: 'same-origin',
-      method: 'post',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({
-        active: !s.alarmTime,
-        pushAuth: s.pushAuth,
-      }),
-    }).then(blob => blob.json().then(({ time }) => {
+    const data = {
+      active: !s.alarmTime,
+      pushAuth: s.pushAuth,
+    };
+    window.AuSu.utils.post('./api/alarm', data).then(({ time }) =>
       window.AuSu.store.dispatch({
         type: 'ALARM',
         time,
-      });
-    }));
+      }));
   };
 
+  document.querySelector('#alarmButton').onclick = toggleAlarm;
+
   const getAlarm = () => {
-    fetch('./api/alarm', {
-      credentials: 'same-origin',
-      method: 'get',
-      headers: { 'Content-type': 'application/json' },
-    }).then(blob => blob.json().then(({ time }) => {
+    window.AuSu.utils.get('./api/alarm').then(({ time }) =>
       window.AuSu.store.dispatch({
         type: 'ALARM',
         time,
-      });
-    }));
+      }));
   };
 
   window.AuSu.alarm = { subscribeAlarm, getAlarm };

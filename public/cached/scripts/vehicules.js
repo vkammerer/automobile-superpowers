@@ -28,26 +28,19 @@
   };
 
   const getVehicules = () => {
-    fetch('./api/vehicules', {
-      credentials: 'same-origin',
-      method: 'get',
-      headers: { 'Content-type': 'application/json' },
-    }).then(blob => blob.json().then(vehicules => {
+    window.AuSu.utils.get('./api/vehicules').then(vehicules => {
       window.AuSu.store.dispatch({
         type: 'VEHICULES',
         vehicules: vehicules.slice(0, 5),
       });
-    }));
+    });
   };
 
   const subscribeVehicules = () => {
-    window.AuSu.store.subscribe(() => {
-      const p = window.AuSu.state;
-      const s = window.AuSu.store.getState();
+    window.AuSu.utils.subscribeStore(({ p, s }) => {
       if (!p.visible && s.visible) getVehicules();
-      if (!p.superOpen && s.superOpen) getVehicules();
       if (p.vehicules !== s.vehicules) updateVehicules();
     });
   };
-  window.AuSu.vehicules = { subscribeVehicules };
+  window.AuSu.vehicules = { subscribeVehicules, getVehicules };
 })();

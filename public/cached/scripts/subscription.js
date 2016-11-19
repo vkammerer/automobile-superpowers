@@ -22,42 +22,32 @@
   };
 
   const subscribeSubscription = () => {
-    window.AuSu.store.subscribe(() => {
-      const p = window.AuSu.state;
-      const s = window.AuSu.store.getState();
+    window.AuSu.utils.subscribeStore(({ p, s }) => {
       if (p.subscriptionTime !== s.subscriptionTime) updateSubscription();
     });
   };
 
-  document.querySelector('#subscriptionButton').onclick = () => {
+  const toggleSubscription = () => {
     const s = window.AuSu.store.getState();
-    fetch('./api/subscription', {
-      credentials: 'same-origin',
-      method: 'post',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({
-        active: !s.subscriptionTime,
-        pushAuth: s.pushAuth,
-      }),
-    }).then(blob => blob.json().then(({ time }) => {
+    const data = {
+      active: !s.subscriptionTime,
+      pushAuth: s.pushAuth,
+    };
+    window.AuSu.utils.post('./api/subscription', data).then(({ time }) =>
       window.AuSu.store.dispatch({
         type: 'SUBSCRIPTION',
         time,
-      });
-    }));
+      }));
   };
 
+  document.querySelector('#subscriptionButton').onclick = toggleSubscription;
+
   const getSubscription = () => {
-    fetch('./api/subscription', {
-      credentials: 'same-origin',
-      method: 'get',
-      headers: { 'Content-type': 'application/json' },
-    }).then(blob => blob.json().then(({ time }) => {
+    window.AuSu.utils.get('./api/subscription').then(({ time }) =>
       window.AuSu.store.dispatch({
         type: 'SUBSCRIPTION',
         time,
-      });
-    }));
+      }));
   };
 
   window.AuSu.subscription = { subscribeSubscription, getSubscription };

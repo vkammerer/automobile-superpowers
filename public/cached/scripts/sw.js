@@ -1,6 +1,6 @@
 (() => {
   const vapidPublicKey = 'BHn6LqYpEGcBEeGpJpoS-_mxqNUX5G6MUAP-ZgXu2FxSVLKXpZN01iJrFwIJ7koyrJ53sg-FHhM-erj1BOfub8I';
-  const applicationServerKey = window.AuSu.conversion.urlBase64ToUint8Array(vapidPublicKey);
+  const applicationServerKey = window.AuSu.utils.urlBase64ToUint8Array(vapidPublicKey);
 
   const initSw = () => {
     navigator.serviceWorker.register('/service-worker.js');

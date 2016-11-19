@@ -3,8 +3,6 @@
     alarmTime: null,
     subscriptionTime: null,
     ready: false,
-    menuOpen: false,
-    superOpen: false,
     location: null,
     visible: document.visibilityState === 'visible',
     vehicules: [],
@@ -31,14 +29,6 @@
         return Object.assign({}, state, {
           pushAuth: action.pushAuth,
           ready: !!(state.ready || state.location),
-        });
-      case 'SUPER_BUTTON_CLICK':
-        return Object.assign({}, state, {
-          superOpen: !state.superOpen,
-        });
-      case 'MENU_BUTTON_CLICK':
-        return Object.assign({}, state, {
-          menuOpen: !state.menuOpen,
         });
       case 'VISIBILITY_CHANGE':
         return Object.assign({}, state, {
