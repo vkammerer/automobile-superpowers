@@ -1,6 +1,6 @@
 (() => {
-  const watchContentDiv = document.querySelector('#watchContent');
   const WATCH_DURATION_MINUTES = 59;
+  const watchContentDiv = document.querySelector('#watchContent');
 
   let timeout;
 
