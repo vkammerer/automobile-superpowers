@@ -29,15 +29,15 @@ const initApi = app => {
     const state = store.getState();
     const user = state.users[req.cookies.user];
     fetchVehicules(user.location).then(vehicules => {
+      store.dispatch({
+        type: 'VEHICULES',
+        userId: req.cookies.user,
+        vehicules,
+      });
       const allVehicules = generateVehicules({
         location: user.location,
         vehicule: user.vehicule,
         vehicules,
-      });
-      store.dispatch({
-        type: 'VEHICULES',
-        userId: req.cookies.user,
-        vehicules: allVehicules,
       });
       res.json(allVehicules);
     });
