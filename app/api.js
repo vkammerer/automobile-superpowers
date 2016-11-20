@@ -18,26 +18,28 @@ const initApi = app => {
     if (!vehicule) return vehicules;
     const vehiculeInVehicules = vehicules.find(v => v.Name === vehicule.Name);
     if (vehiculeInVehicules) {
-      vehiculeInVehicules.selected = true;
+      Object.assign(vehiculeInVehicules, { selected: true });
       return vehicules;
     }
-    return sortVehicules([...vehicules, vehicule], location);
+    const augmentedVehicule = Object.assign({}, vehicule, { selected: true });
+    return sortVehicules([...vehicules.slice(0, 4), augmentedVehicule], location);
   };
 
   app.get('/api/vehicules', (req, res) => {
     const state = store.getState();
     const user = state.users[req.cookies.user];
     fetchVehicules(user.location).then(vehicules => {
+      const allVehicules = generateVehicules({
+        location: user.location,
+        vehicule: user.vehicule,
+        vehicules,
+      });
       store.dispatch({
         type: 'VEHICULES',
         userId: req.cookies.user,
-        vehicules: generateVehicules({
-          location: user.location,
-          vehicule: user.vehicule,
-          vehicules,
-        }),
+        vehicules: allVehicules,
       });
-      res.json(vehicules);
+      res.json(allVehicules);
     });
   });
   app.get('/api/alarm', (req, res) => {
