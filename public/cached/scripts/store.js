@@ -1,10 +1,11 @@
 (() => {
   const defaultState = {
     alarmTime: null,
-    subscriptionTime: null,
+    watchTime: null,
     ready: false,
     location: null,
     visible: document.visibilityState === 'visible',
+    vehicule: null,
     vehicules: [],
   };
 
@@ -15,9 +16,13 @@
         return Object.assign({}, state, {
           alarmTime: action.time,
         });
-      case 'SUBSCRIPTION':
+      case 'VEHICULE':
         return Object.assign({}, state, {
-          subscriptionTime: action.time,
+          vehicule: action.vehicule,
+        });
+      case 'WATCH':
+        return Object.assign({}, state, {
+          watchTime: action.time,
         });
       case 'LOCATION': {
         return Object.assign({}, state, {

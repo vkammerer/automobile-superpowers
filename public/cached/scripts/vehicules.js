@@ -6,11 +6,15 @@
     const vehiculesHTML = s.vehicules
       .map(v => {
         const distance = v.distance;
-        const number = v.vehicule.Name;
-        const energy = v.vehicule.EnergyLevel;
-        const className = v.vehicule.ModelName === 'LEAF' ? 'vehiculeLeaf' : 'vehiculePrius';
+        const number = v.Name;
+        const energy = v.EnergyLevel;
+        const typeClassName = v.ModelName === 'LEAF' ? 'vehiculeLeaf' : 'vehiculePrius';
+        const selectedClassName = v.selected ? 'selected' : '';
+        const graphRatio = v.distance / s.vehicules[s.vehicules.length - 1].distance;
+        const graphStyle = `transform: scaleX(${graphRatio})`;
         return `
-          <div class="vehicule ${className}">
+          <button class="vehicule ${typeClassName} ${selectedClassName}" data-number="${number}">
+            <div class="vehiculeGraph" style="${graphStyle}"></div>
             <div class="vehiculeDistance">
               ${distance}m
             </div>
@@ -20,11 +24,19 @@
             <div class="vehiculeId">
               ${number}
             </div>
-          </div>
+          </button>
         `;
       })
       .join('');
     vehiculesContentDiv.innerHTML = vehiculesHTML;
+  };
+
+  const getVehicule = () => {
+    window.AuSu.utils.get('./api/vehicule').then(vehicule =>
+      window.AuSu.store.dispatch({
+        type: 'VEHICULE',
+        vehicule,
+      }));
   };
 
   const getVehicules = () => {
@@ -36,10 +48,43 @@
     });
   };
 
+  const toggleVehicule = vehiculeNumber => {
+    const s = window.AuSu.store.getState();
+    const vehicule = s.vehicules.find(v => v.Name === vehiculeNumber);
+    const data = {
+      vehicule,
+      pushAuth: s.pushAuth,
+    };
+    window.AuSu.utils.post('./api/vehicule', data).then(results => {
+      window.AuSu.store.dispatch({
+        type: 'VEHICULE',
+        vehicule: results,
+      });
+      getVehicules();
+    });
+  };
+
+  document.querySelector('#vehiculesContent').onclick = e => {
+    const vehiculeDiv = e.target.closest('.vehicule');
+    if (!vehiculeDiv) return;
+    toggleVehicule(vehiculeDiv.dataset.number);
+  };
+
   const subscribeVehicules = () => {
     window.AuSu.utils.subscribeStore(({ p, s }) => {
-      if (!p.visible && s.visible) getVehicules();
-      if (p.vehicules !== s.vehicules) updateVehicules();
+      if (
+        (p.location !== s.location) ||
+        (!p.visible && s.visible)
+      ) {
+        getVehicule();
+        getVehicules();
+      }
+      if (
+        (p.vehicule !== s.vehicule) ||
+        (p.vehicules !== s.vehicules)
+      ) {
+        updateVehicules();
+      }
     });
   };
   window.AuSu.vehicules = { subscribeVehicules, getVehicules };

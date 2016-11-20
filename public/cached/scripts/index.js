@@ -12,7 +12,7 @@
   });
 
   window.AuSu.alarm.subscribeAlarm();
-  window.AuSu.subscription.subscribeSubscription();
+  window.AuSu.watch.subscribeWatch();
   window.AuSu.vehicules.subscribeVehicules();
 
   // Redux logger
@@ -22,8 +22,7 @@
   });
 
   window.AuSu.alarm.getAlarm();
-  window.AuSu.subscription.getSubscription();
-  window.AuSu.vehicules.getVehicules();
+  window.AuSu.watch.getWatch();
   window.AuSu.location.sendLocation();
   window.AuSu.sw.initSw();
 })();

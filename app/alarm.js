@@ -1,13 +1,21 @@
-const { users } = require('./users');
+const { store } = require('./store');
 const { sendAlarmNotification } = require('./push');
 
-const startAlarm = userId => {
-  const user = users[userId];
-  if (user.alarmTimeout) clearTimeout(user.alarmTimeout);
-  user.alarmTime = new Date();
-  user.alarmTimeout = setTimeout(() => {
+const ALARM_DURATION_MINUTES = 29;
+
+const onAlarm = ({ userId, time }) => {
+  const state = store.getState();
+  clearTimeout(state.users[userId].alarmTimeout);
+  const timeout = !time ? null : setTimeout(() => {
     sendAlarmNotification(userId);
-  }, 60 * 29 * 1000);
+  }, ALARM_DURATION_MINUTES * 60 * 1000);
+  store.dispatch({
+    type: 'ALARM',
+    userId,
+    time,
+    timeout,
+  });
+  return time;
 };
 
-module.exports = { startAlarm };
+module.exports = { onAlarm };

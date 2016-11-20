@@ -12,7 +12,7 @@
     '/cached/scripts/index.js',
     '/cached/scripts/location.js',
     '/cached/scripts/store.js',
-    '/cached/scripts/subscription.js',
+    '/cached/scripts/watch.js',
     '/cached/scripts/sw.js',
     '/cached/scripts/vehicules.js',
   ]);

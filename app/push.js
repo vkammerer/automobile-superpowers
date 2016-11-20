@@ -1,6 +1,6 @@
 const webpush = require('web-push');
 const { superPromise } = require('./promise');
-const { users } = require('./users');
+const { store } = require('./store');
 
 webpush.setVapidDetails(
   `mailto:${process.env.PUSH_EMAIL}`,
@@ -11,11 +11,11 @@ webpush.setVapidDetails(
 const pushOptions = { TTL: 10 };
 
 const sendAlarmNotification = userId => {
-  const user = users[userId];
+  const user = store.getState().users[userId];
   const sPromise = superPromise();
   webpush.sendNotification(
     user.pushAuth,
-    'Alarm set 28 minutes ago',
+    'Alarm set 29 minutes ago',
     pushOptions
   ).then(() => {
     sPromise.resolve();
@@ -26,24 +26,24 @@ const sendAlarmNotification = userId => {
   return sPromise.promise;
 };
 
-const sendSubscriptionNotification = userId => {
-  const user = users[userId];
+const sendWatchNotification = userId => {
+  const user = store.getState().users[userId];
   const sPromise = superPromise();
   webpush.sendNotification(
     user.pushAuth,
-    'You are now subscribed to the closest automobiles',
+    'You are now watching',
     pushOptions
   ).then(() => {
     sPromise.resolve();
   }, err => {
-    console.log('sendSubscriptionNotification err', err);
+    console.log('sendWatchNotification err', err);
     sPromise.reject(err);
   });
   return sPromise.promise;
 };
 
 const sendVehiculeNotification = userId => {
-  const user = users[userId];
+  const user = store.getState().users[userId];
   const sPromise = superPromise();
   webpush.sendNotification(
     user.pushAuth,
@@ -60,6 +60,6 @@ const sendVehiculeNotification = userId => {
 
 module.exports = {
   sendAlarmNotification,
-  sendSubscriptionNotification,
+  sendWatchNotification,
   sendVehiculeNotification,
 };

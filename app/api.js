@@ -1,52 +1,102 @@
-const { users } = require('./users');
-const { listenToVehicules, fetchVehicules } = require('./vehicules');
-const { startAlarm } = require('./alarm');
+const { store } = require('./store');
+const { fetchVehicules, onWatch } = require('./vehicules');
+const { onAlarm } = require('./alarm');
+const { sortVehicules } = require('./sort');
 
 const initApi = app => {
   app.post('/api/location', (req, res) => {
-    const user = users[req.cookies.user];
     const { lat, lng } = req.body;
-    user.position = { lat, lng };
-    return res.json(user.position);
+    store.dispatch({
+      type: 'LOCATION',
+      userId: req.cookies.user,
+      location: { lat, lng },
+    });
+    res.json({ lat, lng });
   });
+
+  const generateVehicules = ({ location, vehicule, vehicules }) => {
+    if (!vehicule) return vehicules;
+    const vehiculeInVehicules = vehicules.find(v => v.Name === vehicule.Name);
+    if (vehiculeInVehicules) {
+      vehiculeInVehicules.selected = true;
+      return vehicules;
+    }
+    return sortVehicules([...vehicules, vehicule], location);
+  };
+
   app.get('/api/vehicules', (req, res) => {
-    const user = users[req.cookies.user];
-    return fetchVehicules(user.position).then(vehicules => {
-      user.vehicules = vehicules;
-      res.json(user.vehicules);
+    const state = store.getState();
+    const user = state.users[req.cookies.user];
+    fetchVehicules(user.location).then(vehicules => {
+      store.dispatch({
+        type: 'VEHICULES',
+        userId: req.cookies.user,
+        vehicules: generateVehicules({
+          location: user.location,
+          vehicule: user.vehicule,
+          vehicules,
+        }),
+      });
+      res.json(vehicules);
     });
   });
   app.get('/api/alarm', (req, res) => {
-    const user = users[req.cookies.user];
-    return res.json({ time: user.alarmTime });
+    const state = store.getState();
+    const user = state.users[req.cookies.user];
+    res.json({ time: user.alarmTime });
   });
   app.post('/api/alarm', (req, res) => {
-    const user = users[req.cookies.user];
     const { active, pushAuth } = req.body;
-    user.pushAuth = pushAuth;
-    if (!active) {
-      clearTimeout(user.alarmTimeout);
-      user.alarmTime = null;
-      return res.json({ time: user.alarmTime });
-    }
-    startAlarm(req.cookies.user);
-    return res.json({ time: user.alarmTime });
+    const time = !active ? null : new Date();
+    store.dispatch({
+      type: 'PUSH_AUTH',
+      userId: req.cookies.user,
+      pushAuth,
+    });
+    onAlarm({
+      userId: req.cookies.user,
+      time,
+    });
+    res.json({ time });
   });
-  app.post('/api/subscription', (req, res) => {
-    const user = users[req.cookies.user];
+  app.get('/api/watch', (req, res) => {
+    const state = store.getState();
+    const user = state.users[req.cookies.user];
+    res.json({ time: user.watchTime });
+  });
+  app.get('/api/vehicule', (req, res) => {
+    const state = store.getState();
+    const user = state.users[req.cookies.user];
+    res.json(user.vehicule);
+  });
+  app.post('/api/vehicule', (req, res) => {
+    const { pushAuth, vehicule } = req.body;
+    store.dispatch({
+      type: 'PUSH_AUTH',
+      userId: req.cookies.user,
+      pushAuth,
+    });
+    store.dispatch({
+      type: 'VEHICULE',
+      userId: req.cookies.user,
+      vehicule,
+    });
+    const updatedVehicule = store.getState().users[req.cookies.user].vehicule;
+    res.json(updatedVehicule);
+  });
+  app.post('/api/watch', (req, res) => {
     const { active, pushAuth } = req.body;
-    user.pushAuth = pushAuth;
-    if (!active) {
-      clearTimeout(user.subscriptionTimeout);
-      user.subscriptionTime = null;
-      return res.json({ time: user.subscriptionTime });
-    }
-    listenToVehicules(req.cookies.user);
-    return res.json({ time: user.subscriptionTime });
-  });
-  app.get('/api/subscription', (req, res) => {
-    const user = users[req.cookies.user];
-    return res.json({ time: user.subscriptionTime });
+    const time = !active ? null : new Date();
+    store.dispatch({
+      type: 'PUSH_AUTH',
+      userId: req.cookies.user,
+      pushAuth,
+    });
+    onWatch({
+      userId: req.cookies.user,
+      time,
+    });
+    res.json({ time });
   });
 };
 

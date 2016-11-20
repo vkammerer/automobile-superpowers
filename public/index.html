@@ -70,22 +70,22 @@
         box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.2);
       }
       body.alarmed #alarmButton,
-      body.subscribed #subscriptionButton {
+      body.watched #watchButton {
         background: #ffe4e4;
         color: red;
       }
       body #alarmButton .undo,
-      body #subscriptionButton .undo,
+      body #watchButton .undo,
       body.alarmed #alarmButton .do,
-      body.subscribed #subscriptionButton .do {
+      body.watched #watchButton .do {
         display: none;
       }
       body.alarmed #alarmButton .undo,
-      body.subscribed #subscriptionButton .undo {
+      body.watched #watchButton .undo {
         display: block;
       }
       body.alarmed #unalarmButton,
-      body.subscribed #unsubscriptionButton {
+      body.watched #unwatchButton {
         display: block;
       }
       header {
@@ -115,7 +115,7 @@
       #alarm {
         flex: 1;
       }
-      #subscription {
+      #watch {
         flex: 1;
       }
       .actionContent {
@@ -124,38 +124,65 @@
         font-size: 1.2rem;
       }
       .vehicule {
-        position: relative;
         display: flex;
+        position: relative;
         justify-content: space-between;
         padding: 10px 20px;
         margin: 10px 0;
-        color: #222;
-        line-height: 1.2rem;
+        color: #4e4e4e;
+        font-size: 1rem;
         text-align: center;
         background: #f5f5f5;
-        border: 1px solid #CCC;
+        overflow: hidden;
+        text-shadow: 1px 2px 4px white;
       }
-      .vehicule.vehiculeLeaf:before {
-        content: 'L';
+      .vehicule.selected {
+        background: #ffe4e4;
+        color: #6d4e4e;
+      }
+      .vehiculeGraph {
+        width: 55%;
+        transform-origin: 0 0;
+        background: rgba(0,0,0,0.08);
+        height: 100%;
+        bottom: 0;
         position: absolute;
-        left: 5px;
-        top: 4px;
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-        border-radius: 100%;
-        background: #6aa66a;
-        border: 1px solid #34893a;
-        color: white;
-        font-weight: bold;
-        text-align: center;
+        left: 0;
+      }
+      .vehicule.selected .vehiculeGraph {
+        background: rgba(100,0,0,0.15);
       }
       .vehiculeDistance {
-        flex: 2;
-        font-size: 1.2rem;
+        flex: 3;
+        font-size: 1.4rem;
+        text-align: left;
+        position: relative;
       }
       .vehiculeEnergy {
         flex: 1;
+        position: relative;
+      }
+      .vehicule.vehiculeLeaf .vehiculeEnergy:before {
+        content: 'L';
+        position: absolute;
+        right: -10px;
+        top: -5px;
+        width: 20px;
+        font-size: 12px;
+        height: 20px;
+        line-height: 20px;
+        border-radius: 100%;
+        background: #c4c4c4;
+        border: 1px solid #979797;
+        color: white;
+        text-shadow: 1px 2px 3px rgba(0,0,0,0.4);
+        font-weight: bold;
+        text-align: center;
+      }
+      .vehicule.selected .vehiculeEnergy:before {
+        background: #cda5a5;
+        text-shadow: 1px 2px 3px rgba(70,0,0,0.6);
+        border-color: #a59191;
       }
       .vehiculeId {
         flex: 1;
@@ -175,14 +202,14 @@
             <span class="do">Set Alarm</span>
             <span class="undo">Unset Alarm</span>
           </button>
-          <div id="alarmContent" class="actionContent">No active alarm</div>
+          <div id="alarmContent" class="actionContent">No alarm</div>
         </section>
-        <section id="subscription">
-          <button id="subscriptionButton">
-            <span class="do">Subscribe</span>
-            <span class="undo">Unsubscribe</span>
+        <section id="watch">
+          <button id="watchButton">
+            <span class="do">Watch</span>
+            <span class="undo">Unwatch</span>
           </button>
-          <div id="subscriptionContent" class="actionContent">No active subscription</div>
+          <div id="watchContent" class="actionContent">No watch</div>
         </section>
       </div>
       <section id="vehicules">
@@ -203,7 +230,7 @@
     <script src="/cached/scripts/sw.js"></script>
     <script src="/cached/scripts/location.js"></script>
     <script src="/cached/scripts/alarm.js"></script>
-    <script src="/cached/scripts/subscription.js"></script>
+    <script src="/cached/scripts/watch.js"></script>
     <script src="/cached/scripts/vehicules.js"></script>
     <script src="/cached/scripts/index.js"></script>
   </body>

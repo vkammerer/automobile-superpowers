@@ -1,6 +1,10 @@
 const defaultValues = {
   alarmTime: null,
-  subscriptionTime: null,
+  alarmTimeout: null,
+  watchTime: null,
+  watchTimeout: null,
+  pushAuth: null,
+  vehicule: null,
   vehicules: [],
 };
 const users = {};

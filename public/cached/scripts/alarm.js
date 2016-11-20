@@ -14,7 +14,7 @@
       : ALARM_DURATION_MINUTES - moment().diff(s.alarmTime, 'minutes');
     const innerHTML = s.alarmTime
       ? `Still <strong>${timeDiff} minutes</strong>`
-      : 'No active alarm';
+      : 'No alarm';
     alarmContentDiv.innerHTML = innerHTML;
     document.body.classList[methodName]('alarmed');
     if (timeout) clearTimeout(timeout);
