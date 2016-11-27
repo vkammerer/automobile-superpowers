@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const { initApi } = require('./app/api');
 
 const app = express();
-const cookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60, httpOnly: true };
+const cookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true };
 
 app.use(cookieParser());
 app.use(bodyParser.json());
