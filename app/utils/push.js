@@ -1,6 +1,6 @@
 const webpush = require('web-push');
 const { superPromise } = require('./promise');
-const { store } = require('./store');
+const { store } = require('../store');
 
 webpush.setVapidDetails(
   `mailto:${process.env.PUSH_EMAIL}`,
@@ -8,7 +8,7 @@ webpush.setVapidDetails(
   process.env.PUSH_PRIVATE_KEY
 );
 
-const pushOptions = { TTL: 10 };
+const pushOptions = { TTL: 15 };
 
 const sendAlarmNotification = userId => {
   const user = store.getState().users[userId];
@@ -42,12 +42,12 @@ const sendWatchNotification = userId => {
   return sPromise.promise;
 };
 
-const sendVehiculeNotification = userId => {
+const sendVehiculeNotification = (userId, vehicule) => {
   const user = store.getState().users[userId];
   const sPromise = superPromise();
   webpush.sendNotification(
     user.pushAuth,
-    `New automobile at ${user.vehicules[0].distance} meters`,
+    `New automobile at ${vehicule.distance} meters`,
     pushOptions
   ).then(() => {
     sPromise.resolve();

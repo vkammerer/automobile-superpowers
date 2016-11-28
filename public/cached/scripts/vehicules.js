@@ -72,10 +72,7 @@
 
   const subscribeVehicules = () => {
     window.AuSu.utils.subscribeStore(({ p, s }) => {
-      if (
-        (p.location !== s.location) ||
-        (!p.visible && s.visible)
-      ) {
+      if (p.location !== s.location) {
         getVehicule();
         getVehicules();
       }

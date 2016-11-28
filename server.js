@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const { initApi } = require('./app/api');
+const { subscribeAlarm } = require('./app/alarm');
+const { subscribeWatch } = require('./app/watch');
+const { subscribeStore } = require('./app/store');
 
 const app = express();
 const cookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true };
@@ -46,5 +49,12 @@ app.get('/cached/scripts/moment.js', (req, res) => {
 app.use(express.static('public'));
 
 initApi(app);
+subscribeAlarm();
+subscribeWatch();
+if (process.env.NODE_ENV !== 'production') {
+  subscribeStore(({ p, s }) => {
+    console.log({ p, s });
+  });
+}
 
 app.listen(process.env.PORT || 8080);

@@ -14,6 +14,7 @@
   window.AuSu.alarm.subscribeAlarm();
   window.AuSu.watch.subscribeWatch();
   window.AuSu.vehicules.subscribeVehicules();
+  window.AuSu.location.subscribeLocation();
 
   // Redux logger
   window.AuSu.utils.subscribeStore(({ p, s }) => {

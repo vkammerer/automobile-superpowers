@@ -1,7 +1,5 @@
 const { store } = require('./store');
-const { fetchVehicules, onWatch } = require('./vehicules');
-const { onAlarm } = require('./alarm');
-const { sortVehicules } = require('./sort');
+const { fetchVehicules, getUserVehicules } = require('./utils/vehicules');
 
 const initApi = app => {
   app.post('/api/location', (req, res) => {
@@ -11,40 +9,21 @@ const initApi = app => {
       userId: req.cookies.user,
       location: { lat, lng },
     });
-    res.json({ lat, lng });
+    const user = store.getState().users[req.cookies.user];
+    res.json(user.location);
   });
-
-  const generateVehicules = ({ location, vehicule, vehicules }) => {
-    if (!vehicule) return vehicules;
-    const vehiculeInVehicules = vehicules.find(v => v.Name === vehicule.Name);
-    if (vehiculeInVehicules) {
-      Object.assign(vehiculeInVehicules, { selected: true });
-      return vehicules;
-    }
-    const augmentedVehicule = Object.assign({}, vehicule, { selected: true });
-    return sortVehicules([...vehicules.slice(0, 4), augmentedVehicule], location);
-  };
-
   app.get('/api/vehicules', (req, res) => {
-    const state = store.getState();
-    const user = state.users[req.cookies.user];
-    fetchVehicules(user.location).then(vehicules => {
+    fetchVehicules().then(vehicules => {
       store.dispatch({
         type: 'VEHICULES',
-        userId: req.cookies.user,
         vehicules,
       });
-      const allVehicules = generateVehicules({
-        location: user.location,
-        vehicule: user.vehicule,
-        vehicules,
-      });
-      res.json(allVehicules);
+      const first5Vehicules = getUserVehicules(req.cookies.user).slice(0, 5);
+      res.json(first5Vehicules);
     });
   });
   app.get('/api/alarm', (req, res) => {
-    const state = store.getState();
-    const user = state.users[req.cookies.user];
+    const user = store.getState().users[req.cookies.user];
     res.json({ time: user.alarmTime });
   });
   app.post('/api/alarm', (req, res) => {
@@ -55,20 +34,16 @@ const initApi = app => {
       userId: req.cookies.user,
       pushAuth,
     });
-    onAlarm({
+    store.dispatch({
+      type: 'ALARM_TIME',
       userId: req.cookies.user,
       time,
     });
-    res.json({ time });
-  });
-  app.get('/api/watch', (req, res) => {
-    const state = store.getState();
-    const user = state.users[req.cookies.user];
-    res.json({ time: user.watchTime });
+    const user = store.getState().users[req.cookies.user];
+    res.json({ time: user.alarmTime });
   });
   app.get('/api/vehicule', (req, res) => {
-    const state = store.getState();
-    const user = state.users[req.cookies.user];
+    const user = store.getState().users[req.cookies.user];
     res.json(user.vehicule);
   });
   app.post('/api/vehicule', (req, res) => {
@@ -83,8 +58,12 @@ const initApi = app => {
       userId: req.cookies.user,
       vehicule,
     });
-    const updatedVehicule = store.getState().users[req.cookies.user].vehicule;
-    res.json(updatedVehicule);
+    const user = store.getState().users[req.cookies.user];
+    res.json(user.vehicule);
+  });
+  app.get('/api/watch', (req, res) => {
+    const user = store.getState().users[req.cookies.user];
+    res.json({ time: user.watchTime });
   });
   app.post('/api/watch', (req, res) => {
     const { active, pushAuth } = req.body;
@@ -94,11 +73,13 @@ const initApi = app => {
       userId: req.cookies.user,
       pushAuth,
     });
-    onWatch({
+    store.dispatch({
+      type: 'WATCH_TIME',
       userId: req.cookies.user,
       time,
     });
-    res.json({ time });
+    const user = store.getState().users[req.cookies.user];
+    res.json({ time: user.watchTime });
   });
 };
 
