@@ -18,7 +18,9 @@ const checkVehicules = () => {
   clearTimeout(watchTimeout);
   fetchVehicules()
     .then(vehicules => {
-      console.log(vehicules);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(vehicules);
+      }
       watchTimeout = !shouldKeepPinging() ? null : setTimeout(
         checkVehicules,
         WATCH_INTERVAL_SECONDS * 1000);
