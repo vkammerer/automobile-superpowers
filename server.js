@@ -27,7 +27,9 @@ app.post('/', (req, res, next) => {
     req.body.user !== process.env.USER_1 &&
     req.body.user !== process.env.USER_2 &&
     req.body.user !== process.env.USER_3 &&
-    req.body.user !== process.env.USER_4
+    req.body.user !== process.env.USER_4 &&
+    req.body.user !== process.env.USER_5 &&
+    req.body.user !== process.env.USER_6
   ) return next();
   res.cookie('user', req.body.user, cookieOptions);
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -37,7 +39,9 @@ app.all('*', (req, res, next) => {
     req.cookies.user !== process.env.USER_1 &&
     req.cookies.user !== process.env.USER_2 &&
     req.cookies.user !== process.env.USER_3 &&
-    req.cookies.user !== process.env.USER_4
+    req.cookies.user !== process.env.USER_4 &&
+    req.cookies.user !== process.env.USER_5 &&
+    req.cookies.user !== process.env.USER_6
   ) return res.sendFile(path.join(__dirname, 'public', 'auth.html'));
   return next();
 });
