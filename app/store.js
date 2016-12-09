@@ -108,7 +108,7 @@ const app = (state = defaultAppState, action) => {
 };
 
 const middlewares = process.env.NODE_ENV === 'production'
-  ? []
+  ? null
   : applyMiddleware(logger);
 
 const store = createStore(app, middlewares);
