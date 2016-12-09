@@ -1,4 +1,6 @@
 (() => {
+  window.screen.orientation.lock('portrait').catch(err => console.warn(err));
+
   document.addEventListener('visibilitychange', () => {
     window.AuSu.store.dispatch({
       type: 'VISIBILITY_CHANGE',
