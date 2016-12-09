@@ -16,6 +16,8 @@ const usersIds = [
   process.env.USER_2,
   process.env.USER_3,
   process.env.USER_4,
+  process.env.USER_5,
+  process.env.USER_6,
 ];
 
 const users = usersIds.reduce((_users, id) =>
