@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const enforce = require('express-sslify');
 
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
@@ -11,8 +12,12 @@ const { subscribeWatch } = require('./app/watch');
 const { subscribeStore } = require('./app/store');
 
 const app = express();
-const cookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true };
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(enforce.HTTPS({ trustAzureHeader: true }));
+}
+
+const cookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true };
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,10 +56,5 @@ app.use(express.static('public'));
 initApi(app);
 subscribeAlarm();
 subscribeWatch();
-if (process.env.NODE_ENV !== 'production') {
-  subscribeStore(({ p, s }) => {
-    console.log({ p, s });
-  });
-}
 
 app.listen(process.env.PORT || 8080);

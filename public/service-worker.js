@@ -7,6 +7,7 @@
     '/cached/scripts/sw-toolbox.js',
     '/cached/scripts/redux.js',
     '/cached/scripts/moment.js',
+    '/cached/scripts/logger.js',
     '/cached/scripts/alarm.js',
     '/cached/scripts/utils.js',
     '/cached/scripts/index.js',

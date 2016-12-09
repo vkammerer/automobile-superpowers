@@ -1,7 +1,8 @@
-const { createStore } = require('redux');
+const { createStore, applyMiddleware } = require('redux');
 const { uniq } = require('lodash');
+const { logger } = require('./utils/redux-logger.js');
 
-const defaultUserValues = {
+const defaultUserState = {
   alarmTime: null,
   alarmTimeout: null,
   watchTime: null,
@@ -10,25 +11,24 @@ const defaultUserValues = {
   notifiedVehicules: [],
 };
 
-const users = {};
-
-[
+const usersIds = [
   process.env.USER_1,
   process.env.USER_2,
   process.env.USER_3,
   process.env.USER_4,
-].forEach(id => (users[id] = Object.assign({}, defaultUserValues, { id })));
+];
 
-const defaultState = {
+const users = usersIds.reduce((_users, id) =>
+  Object.assign(_users, { [id]: Object.assign({}, defaultUserState, { id }) }),
+  {});
+
+const defaultAppState = {
   users,
   vehicules: [],
   lastWatchTime: null,
 };
 
-const app = (state = defaultState, action) => {
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(action);
-  }
+const app = (state = defaultAppState, action) => {
   switch (action.type) {
     case 'PUSH_AUTH':
       return Object.assign({}, state, {
@@ -76,7 +76,7 @@ const app = (state = defaultState, action) => {
       return Object.assign({}, state, {
         users: Object.assign({}, state.users, {
           [action.userId]: Object.assign({}, state.users[action.userId], {
-            alarmTimeout: action.time,
+            alarmTimeout: action.timeout,
           }),
         }),
       });
@@ -104,7 +104,11 @@ const app = (state = defaultState, action) => {
   }
 };
 
-const store = createStore(app);
+const middlewares = process.env.NODE_ENV === 'production'
+  ? []
+  : applyMiddleware(logger);
+
+const store = createStore(app, middlewares);
 if (process.env.NODE_ENV !== 'production') {
   global.store = store;
 }

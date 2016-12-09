@@ -16,9 +16,8 @@
   window.AuSu.vehicules.subscribeVehicules();
   window.AuSu.location.subscribeLocation();
 
-  // Redux logger
-  window.AuSu.utils.subscribeStore(({ p, s }) => {
-    console.log({ p, s });
+  // Enables Redux state diff
+  window.AuSu.utils.subscribeStore(({ s }) => {
     window.AuSu.state = s;
   });
 

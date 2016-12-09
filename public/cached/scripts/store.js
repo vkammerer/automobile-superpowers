@@ -10,7 +10,6 @@
   };
 
   const app = (state = defaultState, action) => {
-    console.log(action);
     switch (action.type) {
       case 'ALARM':
         return Object.assign({}, state, {
@@ -49,6 +48,9 @@
     }
   };
 
-  window.AuSu.store = window.Redux.createStore(app);
+  let middlewares = [];
+  middlewares = window.Redux.applyMiddleware(window.AuSu.logger);
+
+  window.AuSu.store = window.Redux.createStore(app, middlewares);
   window.AuSu.state = window.AuSu.store.getState();
 })();
