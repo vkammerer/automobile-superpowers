@@ -107,14 +107,11 @@ const app = (state = defaultAppState, action) => {
   }
 };
 
-const middlewares = process.env.NODE_ENV === 'production'
-  ? null
-  : applyMiddleware(logger);
+const store = process.env.NODE_ENV === 'production'
+  ? createStore(app)
+  : createStore(app, applyMiddleware(logger));
 
-const store = createStore(app, middlewares);
-if (process.env.NODE_ENV !== 'production') {
-  global.store = store;
-}
+if (process.env.NODE_ENV !== 'production') global.store = store;
 
 const subscribeStore = cb => {
   let state = store.getState();
