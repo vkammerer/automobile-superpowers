@@ -22,6 +22,8 @@ const users = usersIds.reduce((_users, id) =>
   Object.assign(_users, { [id]: Object.assign({}, defaultUserState, { id }) }),
   {});
 
+console.log(users);
+
 const defaultAppState = {
   users,
   vehicules: [],
