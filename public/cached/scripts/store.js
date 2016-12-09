@@ -1,5 +1,6 @@
 (() => {
   const defaultState = {
+    user: window.AuSu.utils.getCookie('user'),
     alarmTime: null,
     watchTime: null,
     ready: false,

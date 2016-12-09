@@ -16,7 +16,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
-const cookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true };
+const publicCookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000 };
+const privateCookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true };
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,8 +29,8 @@ app.post('/', (req, res, next) => {
     !req.body.password ||
     req.body.password !== process.env.PASSWORD
   ) return next();
-  res.cookie('user', req.body.user, cookieOptions);
-  res.cookie('password', req.body.password, cookieOptions);
+  res.cookie('user', req.body.user, publicCookieOptions);
+  res.cookie('password', req.body.password, privateCookieOptions);
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 app.all('*', (req, res, next) => {

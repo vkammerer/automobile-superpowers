@@ -11,6 +11,10 @@
       document.body.classList.add('ready');
     }
   });
+  const userContentDiv = document.querySelector('#userContent');
+  window.AuSu.observeStore(window.AuSu.store, s => s, ({ s }) => {
+    userContentDiv.innerHTML = s.user;
+  });
 
   window.AuSu.alarm.subscribeAlarm();
   window.AuSu.watch.subscribeWatch();
