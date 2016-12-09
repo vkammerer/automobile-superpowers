@@ -9,12 +9,11 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const { initApi } = require('./app/api');
 const { subscribeAlarm } = require('./app/alarm');
 const { subscribeWatch } = require('./app/watch');
-const { subscribeStore } = require('./app/store');
 
 const app = express();
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(enforce.HTTPS({ trustAzureHeader: true }));
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 const cookieOptions = { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true };
