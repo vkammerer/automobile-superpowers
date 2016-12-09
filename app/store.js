@@ -29,8 +29,6 @@ const defaultAppState = {
   lastWatchTime: null,
 };
 
-console.log(defaultAppState);
-
 const app = (state = defaultAppState, action) => {
   switch (action.type) {
     case 'PUSH_AUTH':
