@@ -71,14 +71,17 @@
   };
 
   const subscribeVehicules = () => {
-    window.AuSu.utils.subscribeStore(({ p, s }) => {
-      if (p.location !== s.location) {
+    window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
+      const pLocation = !p ? null : p.location;
+      const pVehicule = !p ? null : p.vehicule;
+      const pVehicules = !p ? null : p.vehicules;
+      if (pLocation !== s.location) {
         getVehicule();
         getVehicules();
       }
       if (
-        (p.vehicule !== s.vehicule) ||
-        (p.vehicules !== s.vehicules)
+        (pVehicule !== s.vehicule) ||
+        (pVehicules !== s.vehicules)
       ) {
         updateVehicules();
       }

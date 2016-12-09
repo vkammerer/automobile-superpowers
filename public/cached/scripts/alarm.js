@@ -22,8 +22,9 @@
   };
 
   const subscribeAlarm = () => {
-    window.AuSu.utils.subscribeStore(({ p, s }) => {
-      if (p.alarmTime !== s.alarmTime) updateAlarm();
+    window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
+      const pAlarmTime = !p ? null : p.alarmTime;
+      if (pAlarmTime !== s.alarmTime) updateAlarm();
     });
   };
 

@@ -22,8 +22,9 @@
   };
 
   const subscribeWatch = () => {
-    window.AuSu.utils.subscribeStore(({ p, s }) => {
-      if (p.watchTime !== s.watchTime) updateWatch();
+    window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
+      const pWatchTime = !p ? null : p.watchTime;
+      if (pWatchTime !== s.watchTime) updateWatch();
     });
   };
 

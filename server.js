@@ -23,26 +23,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/', (req, res, next) => {
   if (
-    req.body &&
-    req.body.user !== process.env.USER_1 &&
-    req.body.user !== process.env.USER_2 &&
-    req.body.user !== process.env.USER_3 &&
-    req.body.user !== process.env.USER_4 &&
-    req.body.user !== process.env.USER_5 &&
-    req.body.user !== process.env.USER_6
+    !req.body ||
+    !req.body.user ||
+    !req.body.password ||
+    req.body.password !== process.env.PASSWORD
   ) return next();
   res.cookie('user', req.body.user, cookieOptions);
+  res.cookie('password', req.body.password, cookieOptions);
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 app.all('*', (req, res, next) => {
-  if (
-    req.cookies.user !== process.env.USER_1 &&
-    req.cookies.user !== process.env.USER_2 &&
-    req.cookies.user !== process.env.USER_3 &&
-    req.cookies.user !== process.env.USER_4 &&
-    req.cookies.user !== process.env.USER_5 &&
-    req.cookies.user !== process.env.USER_6
-  ) return res.sendFile(path.join(__dirname, 'public', 'auth.html'));
+  if (req.cookies.password !== process.env.PASSWORD)
+    return res.sendFile(path.join(__dirname, 'public', 'auth.html'));
   return next();
 });
 app.get('/cached/scripts/redux.js', (req, res) => {
@@ -53,6 +45,12 @@ app.get('/cached/scripts/sw-toolbox.js', (req, res) => {
 });
 app.get('/cached/scripts/moment.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'node_modules', 'moment', 'min', 'moment.min.js'));
+});
+app.get('/cached/scripts/redux-logger.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'common', 'redux-logger.js'));
+});
+app.get('/cached/scripts/redux-observer.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'common', 'redux-observer.js'));
 });
 app.use(express.static('public'));
 

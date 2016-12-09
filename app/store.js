@@ -1,6 +1,6 @@
 const { createStore, applyMiddleware } = require('redux');
 const { uniq } = require('lodash');
-const { logger } = require('./utils/redux-logger.js');
+const { logger } = require('../common/redux-logger.js');
 
 const defaultUserState = {
   alarmTime: null,
@@ -11,15 +11,7 @@ const defaultUserState = {
   notifiedVehicules: [],
 };
 
-const usersIds = [
-  process.env.USER_1,
-  process.env.USER_2,
-  process.env.USER_3,
-  process.env.USER_4,
-  process.env.USER_5,
-  process.env.USER_6,
-];
-
+const usersIds = process.env.USERS.split(' ');
 const users = usersIds.reduce((_users, id) =>
   Object.assign(_users, { [id]: Object.assign({}, defaultUserState, { id }) }),
   {});
@@ -28,7 +20,7 @@ const users = usersIds.reduce((_users, id) =>
 const defaultAppState = {
   users,
   vehicules: [],
-  lastWatchTime: null,
+  watchTime: null,
 };
 
 const app = (state = defaultAppState, action) => {
@@ -113,16 +105,4 @@ const store = process.env.NODE_ENV === 'production'
 
 if (process.env.NODE_ENV !== 'production') global.store = store;
 
-const subscribeStore = cb => {
-  let state = store.getState();
-  store.subscribe(() => {
-    const s = store.getState();
-    cb({
-      p: state,
-      s,
-    });
-    state = s;
-  });
-};
-
-module.exports = { store, subscribeStore };
+module.exports = { store };

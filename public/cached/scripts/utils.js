@@ -29,13 +29,5 @@
     }).then(blob => blob.json().then(resolve, reject));
   });
 
-  const subscribeStore = cb => {
-    window.AuSu.store.subscribe(() => {
-      const p = window.AuSu.state;
-      const s = window.AuSu.store.getState();
-      cb({ p, s });
-    });
-  };
-
-  window.AuSu.utils = { urlBase64ToUint8Array, get, post, subscribeStore };
+  window.AuSu.utils = { urlBase64ToUint8Array, get, post };
 })();

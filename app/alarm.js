@@ -1,5 +1,6 @@
 const { values } = require('lodash');
-const { store, subscribeStore } = require('./store');
+const { store } = require('./store');
+const { observeStore } = require('../common/redux-observer');
 const { sendAlarmNotification } = require('./utils/push');
 
 const ALARM_DURATION_MINUTES = 29;
@@ -20,10 +21,10 @@ const onAlarm = userId => {
 };
 
 const subscribeAlarm = () => {
-  subscribeStore(({ p, s }) => {
+  observeStore(store, s => s, ({ p, s }) => {
     const updatedAlarmUser = values(s.users).find(user => {
-      const pUser = p.users[user.id];
-      return pUser.alarmTime !== user.alarmTime;
+      const pUserAlarmTime = !p ? null : p.users[user.id].alarmTime;
+      return pUserAlarmTime !== user.alarmTime;
     });
     if (updatedAlarmUser) onAlarm(updatedAlarmUser.id);
   });

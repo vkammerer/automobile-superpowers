@@ -50,7 +50,5 @@
 
   let middlewares = [];
   middlewares = window.Redux.applyMiddleware(window.AuSu.logger);
-
   window.AuSu.store = window.Redux.createStore(app, middlewares);
-  window.AuSu.state = window.AuSu.store.getState();
 })();

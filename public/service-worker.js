@@ -7,7 +7,8 @@
     '/cached/scripts/sw-toolbox.js',
     '/cached/scripts/redux.js',
     '/cached/scripts/moment.js',
-    '/cached/scripts/logger.js',
+    '/cached/scripts/redux-logger.js',
+    '/cached/scripts/redux-observer.js',
     '/cached/scripts/alarm.js',
     '/cached/scripts/utils.js',
     '/cached/scripts/index.js',
@@ -18,8 +19,8 @@
     '/cached/scripts/vehicules.js',
   ]);
 
-  toolbox.router.get('/', toolbox.networkFirst);
-  toolbox.router.get('/index.html', toolbox.networkFirst);
+  toolbox.router.get('/', toolbox.fastest);
+  toolbox.router.get('/index.html', toolbox.fastest);
   toolbox.router.get('/cached/**/*', toolbox.networkFirst);
 
   function showNotification({ title, body, icon, data }) {

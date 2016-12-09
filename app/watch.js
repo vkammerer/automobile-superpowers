@@ -1,7 +1,8 @@
 const moment = require('moment');
-const { store, subscribeStore } = require('./store');
+const { store } = require('./store');
 const { fetchVehicules } = require('./utils/vehicules');
 const { checkIfShouldSendVehiculeNotifications } = require('./utils/vehicules');
+const { observeStore } = require('../common/redux-observer');
 
 const WATCH_INTERVAL_SECONDS = 15;
 const WATCH_DURATION_MINUTES = 59;
@@ -18,9 +19,6 @@ const checkVehicules = () => {
   clearTimeout(watchTimeout);
   fetchVehicules()
     .then(vehicules => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.log(vehicules);
-      }
       watchTimeout = !shouldKeepPinging() ? null : setTimeout(
         checkVehicules,
         WATCH_INTERVAL_SECONDS * 1000);
@@ -33,8 +31,9 @@ const checkVehicules = () => {
 };
 
 const subscribeWatch = () => {
-  subscribeStore(({ p, s }) => {
-    if (p.watchTime !== s.watchTime) {
+  observeStore(store, s => s, ({ p, s }) => {
+    const pWatchTime = !p ? null : p.watchTime;
+    if (pWatchTime !== s.watchTime) {
       watchTime = s.watchTime;
       checkVehicules();
     }

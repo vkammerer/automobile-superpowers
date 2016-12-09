@@ -11,8 +11,9 @@
   };
 
   const subscribeLocation = () => {
-    window.AuSu.utils.subscribeStore(({ p, s }) => {
-      if (!p.visible && s.visible) sendLocation();
+    window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
+      const pVisible = !p ? null : p.visible;
+      if (!pVisible && s.visible) sendLocation();
     });
   };
 

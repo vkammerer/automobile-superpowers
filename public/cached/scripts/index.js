@@ -5,8 +5,9 @@
       visible: document.visibilityState === 'visible',
     });
   });
-  window.AuSu.utils.subscribeStore(({ p, s }) => {
-    if (!p.ready && s.ready) {
+  window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
+    const pReady = !p ? null : p.ready;
+    if (!pReady && s.ready) {
       document.body.classList.add('ready');
     }
   });
@@ -16,13 +17,7 @@
   window.AuSu.vehicules.subscribeVehicules();
   window.AuSu.location.subscribeLocation();
 
-  // Enables Redux state diff
-  window.AuSu.utils.subscribeStore(({ s }) => {
-    window.AuSu.state = s;
-  });
-
   window.AuSu.alarm.getAlarm();
   window.AuSu.watch.getWatch();
-  window.AuSu.location.sendLocation();
   window.AuSu.sw.initSw();
 })();
