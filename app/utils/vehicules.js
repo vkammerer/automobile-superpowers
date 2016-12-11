@@ -36,7 +36,8 @@ const fetchVehicules = () => {
     .then(pData => {
       const JSONData = pData.res.text.substring(1).substring(0, pData.res.text.length - 3);
       sPromise.resolve(JSON.parse(JSONData).Vehicules);
-    });
+    })
+    .catch(sPromise.reject);
   return sPromise.promise;
 };
 
@@ -52,8 +53,7 @@ const getUserVehicules = userId => {
 };
 
 const getNewClosestVehicule = userId => {
-  const state = store.getState();
-  const user = state.users[userId];
+  const user = store.getState().users[userId];
   const closestVehicule = getUserVehicules(userId)[0];
   if (user.notifiedVehicules.includes(closestVehicule.Name)) return null;
   return closestVehicule;

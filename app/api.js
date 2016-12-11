@@ -13,14 +13,19 @@ const initApi = app => {
     res.json(user.location);
   });
   app.get('/api/vehicules', (req, res) => {
-    fetchVehicules().then(vehicules => {
-      store.dispatch({
-        type: 'VEHICULES',
-        vehicules,
+    fetchVehicules()
+      .then(vehicules => {
+        store.dispatch({
+          type: 'VEHICULES',
+          vehicules,
+        });
+        const first5Vehicules = getUserVehicules(req.cookies.user).slice(0, 5);
+        res.json(first5Vehicules);
+      })
+      .catch(err => {
+        console.warn(err);
+        res.json([]);
       });
-      const first5Vehicules = getUserVehicules(req.cookies.user).slice(0, 5);
-      res.json(first5Vehicules);
-    });
   });
   app.get('/api/alarm', (req, res) => {
     const user = store.getState().users[req.cookies.user];

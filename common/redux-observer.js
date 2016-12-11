@@ -4,7 +4,7 @@ function observeStore(store, select, onChange) {
   function handleChange() {
     const nextState = select(store.getState());
     if (nextState !== currentState) {
-      onChange({ p: currentState, s: nextState });
+      if (currentState) onChange({ p: currentState, s: nextState });
       currentState = nextState;
     }
   }

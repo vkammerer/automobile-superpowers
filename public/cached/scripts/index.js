@@ -7,9 +7,20 @@
       visible: document.visibilityState === 'visible',
     });
   });
+  window.addEventListener('blur', () => {
+    window.AuSu.store.dispatch({
+      type: 'VISIBILITY_CHANGE',
+      visible: false,
+    });
+  });
+  window.addEventListener('focus', () => {
+    window.AuSu.store.dispatch({
+      type: 'VISIBILITY_CHANGE',
+      visible: true,
+    });
+  });
   window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
-    const pReady = !p ? null : p.ready;
-    if (!pReady && s.ready) {
+    if (!p.ready && s.ready) {
       document.body.classList.add('ready');
     }
   });
@@ -25,5 +36,6 @@
 
   window.AuSu.alarm.getAlarm();
   window.AuSu.watch.getWatch();
+  window.AuSu.location.sendLocation();
   window.AuSu.sw.initSw();
 })();

@@ -27,13 +27,18 @@ const checkVehicules = () => {
         vehicules,
       });
       checkIfShouldSendVehiculeNotifications();
+    })
+    .catch(err => {
+      console.warn(err);
+      watchTimeout = !shouldKeepPinging() ? null : setTimeout(
+        checkVehicules,
+        WATCH_INTERVAL_SECONDS * 1000);
     });
 };
 
 const subscribeWatch = () => {
   observeStore(store, s => s, ({ p, s }) => {
-    const pWatchTime = !p ? null : p.watchTime;
-    if (pWatchTime !== s.watchTime) {
+    if (p.watchTime !== s.watchTime) {
       watchTime = s.watchTime;
       checkVehicules();
     }

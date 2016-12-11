@@ -23,8 +23,12 @@ const onAlarm = userId => {
 const subscribeAlarm = () => {
   observeStore(store, s => s, ({ p, s }) => {
     const updatedAlarmUser = values(s.users).find(user => {
-      const pUserAlarmTime = !p ? null : p.users[user.id].alarmTime;
-      return pUserAlarmTime !== user.alarmTime;
+      if (!p.users[user.id].alarmTime && !user.alarmTime) return false;
+      if (!p.users[user.id].alarmTime && user.alarmTime) return true;
+      if (p.users[user.id].alarmTime && !user.alarmTime) return true;
+      if (new Date(p.users[user.id].alarmTime).getTime() ===
+        new Date(user.alarmTime).getTime()) return false;
+      return true;
     });
     if (updatedAlarmUser) onAlarm(updatedAlarmUser.id);
   });
