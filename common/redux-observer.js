@@ -8,10 +8,7 @@ function observeStore(store, select, onChange) {
       currentState = nextState;
     }
   }
-
-  const unsubscribe = store.subscribe(handleChange);
-  handleChange();
-  return unsubscribe;
+  return store.subscribe(handleChange);
 }
 
 try {
