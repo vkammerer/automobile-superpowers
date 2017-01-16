@@ -23,7 +23,9 @@
 
   const subscribeAlarm = () => {
     window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
-      if (p.alarmTime !== s.alarmTime || (!p.visible && s.visible)) updateAlarm();
+      const pAlarmTime = !p ? null : p.alarmTime;
+      const pVisible = !p ? null : p.visible;
+      if (pAlarmTime !== s.alarmTime || (!pVisible && s.visible)) updateAlarm();
     });
   };
 

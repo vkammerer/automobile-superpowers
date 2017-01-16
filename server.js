@@ -34,7 +34,7 @@ app.post('/', (req, res, next) => {
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 app.all('*', (req, res, next) => {
-  if (req.cookies.password !== process.env.PASSWORD)
+  if (!req.cookies.user || req.cookies.password !== process.env.PASSWORD)
     return res.sendFile(path.join(__dirname, 'public', 'auth.html'));
   return next();
 });

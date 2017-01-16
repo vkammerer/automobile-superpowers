@@ -38,7 +38,8 @@ const checkVehicules = () => {
 
 const subscribeWatch = () => {
   observeStore(store, s => s, ({ p, s }) => {
-    if (p.watchTime !== s.watchTime) {
+    const pWatchTime = !p ? null : p.watchTime;
+    if (pWatchTime !== s.watchTime) {
       watchTime = s.watchTime;
       checkVehicules();
     }

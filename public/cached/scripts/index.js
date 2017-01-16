@@ -20,7 +20,8 @@
     });
   });
   window.AuSu.observeStore(window.AuSu.store, s => s, ({ p, s }) => {
-    if (!p.ready && s.ready) {
+    const pReady = !p ? null : p.ready;
+    if (!pReady && s.ready) {
       document.body.classList.add('ready');
     }
   });
