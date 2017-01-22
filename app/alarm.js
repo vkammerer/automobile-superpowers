@@ -7,6 +7,7 @@ const ALARM_DURATION_MINUTES = 29;
 
 const onAlarm = userId => {
   const user = store.getState().users[userId];
+  if (!user) return;
   clearTimeout(user.alarmTimeout);
   const timeout = !user.alarmTime ? null : setTimeout(() => {
     sendAlarmNotification(userId);
