@@ -26,8 +26,9 @@ app.post('/', (req, res, next) => {
   if (
     !req.body ||
     !req.body.user ||
+    !process.env.USERS.split(' ').includes(req.body.user) ||
     !req.body.password ||
-    req.body.password !== process.env.PASSWORD
+    process.env.PASSWORD !== req.body.password
   ) return next();
   res.cookie('user', req.body.user, publicCookieOptions);
   res.cookie('password', req.body.password, privateCookieOptions);
