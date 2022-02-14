@@ -14,7 +14,7 @@
       : WATCH_DURATION_MINUTES - moment().diff(s.watchTime, 'minutes');
     const innerHTML = s.watchTime
       ? `Still <strong>${timeDiff} minutes</strong>`
-      : 'No watch';
+      : 'No active watch';
     watchContentDiv.innerHTML = innerHTML;
     document.body.classList[methodName]('watched');
     if (timeout) clearTimeout(timeout);

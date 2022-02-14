@@ -7,7 +7,6 @@ const enforce = require("express-sslify");
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
 const { initApi } = require("./app/api");
-const { subscribeAlarm } = require("./app/alarm");
 const { subscribeWatch } = require("./app/watch");
 
 const app = express();
@@ -67,7 +66,6 @@ app.get("/cached/scripts/redux-observer.js", (req, res) => {
 app.use(express.static("public"));
 
 initApi(app);
-subscribeAlarm();
 subscribeWatch();
 
 app.listen(process.env.PORT || 8080);

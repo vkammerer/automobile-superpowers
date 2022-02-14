@@ -70,22 +70,17 @@
         color: #647C47;
         box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.2);
       }
-      body.alarmed #alarmButton,
       body.watched #watchButton {
         background: #ffe4e4;
         color: red;
       }
-      body #alarmButton .undo,
       body #watchButton .undo,
-      body.alarmed #alarmButton .do,
       body.watched #watchButton .do {
         display: none;
       }
-      body.alarmed #alarmButton .undo,
       body.watched #watchButton .undo {
         display: block;
       }
-      body.alarmed #unalarmButton,
       body.watched #unwatchButton {
         display: block;
       }
@@ -114,13 +109,12 @@
       }
       #actions {
         flex: 1;
-        display: flex;
       }
       #vehicules {
         flex: 3;
       }
-      #alarm {
-        flex: 1;
+      #radiusInput {
+        width: 100%;
       }
       #watch {
         flex: 1;
@@ -134,7 +128,7 @@
         display: flex;
         position: relative;
         justify-content: space-between;
-        padding: 10px 20px;
+        padding: 8px 20px;
         margin: 10px 0;
         color: #4e4e4e;
         font-size: 1rem;
@@ -205,19 +199,16 @@
         <span>Super Powers</span>
       </header>
       <div id="actions">
-        <section id="alarm">
-          <button id="alarmButton">
-            <span class="do">Set Alarm</span>
-            <span class="undo">Unset Alarm</span>
-          </button>
-          <div id="alarmContent" class="actionContent">No alarm</div>
+        <section id="radius">
+          <div id="radiusContent" class="actionContent">Max distance: <span>800m</span></div>
+          <input id="radiusInput" type="range" min="100" max="1000" step="10" value="800">
         </section>
         <section id="watch">
           <button id="watchButton">
             <span class="do">Watch</span>
             <span class="undo">Unwatch</span>
           </button>
-          <div id="watchContent" class="actionContent">No watch</div>
+          <div id="watchContent" class="actionContent">No active watch</div>
         </section>
       </div>
       <section id="vehicules">
@@ -239,7 +230,7 @@
     <script src="/cached/scripts/store.js"></script>
     <script src="/cached/scripts/sw.js"></script>
     <script src="/cached/scripts/location.js"></script>
-    <script src="/cached/scripts/alarm.js"></script>
+    <script src="/cached/scripts/radius.js"></script>
     <script src="/cached/scripts/watch.js"></script>
     <script src="/cached/scripts/vehicules.js"></script>
     <script src="/cached/scripts/index.js"></script>

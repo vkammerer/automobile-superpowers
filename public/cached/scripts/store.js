@@ -1,7 +1,7 @@
 (() => {
   const defaultState = {
     user: window.AuSu.utils.getCookie('user'),
-    alarmTime: null,
+    radius: 800,
     watchTime: null,
     ready: false,
     location: null,
@@ -12,9 +12,9 @@
 
   const app = (state = defaultState, action) => {
     switch (action.type) {
-      case 'ALARM':
+      case 'RADIUS':
         return Object.assign({}, state, {
-          alarmTime: action.time,
+          radius: action.radius,
         });
       case 'VEHICULE':
         return Object.assign({}, state, {

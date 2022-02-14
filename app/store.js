@@ -3,8 +3,7 @@ const { uniq } = require('lodash');
 const { logger } = require('../common/redux-logger.js');
 
 const defaultUserState = {
-  alarmTime: null,
-  alarmTimeout: null,
+  radius: 800,
   watchTime: null,
   pushAuth: null,
   vehicule: null,
@@ -59,19 +58,11 @@ const app = (state = defaultAppState, action) => {
           }),
         }),
       });
-    case 'ALARM_TIME':
+    case 'RADIUS':
       return Object.assign({}, state, {
         users: Object.assign({}, state.users, {
           [action.userId]: Object.assign({}, state.users[action.userId], {
-            alarmTime: action.time,
-          }),
-        }),
-      });
-    case 'ALARM_TIMEOUT':
-      return Object.assign({}, state, {
-        users: Object.assign({}, state.users, {
-          [action.userId]: Object.assign({}, state.users[action.userId], {
-            alarmTimeout: action.timeout,
+            radius: action.radius,
           }),
         }),
       });

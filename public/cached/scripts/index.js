@@ -38,12 +38,12 @@
     },
   );
 
-  window.AuSu.alarm.subscribeAlarm();
+  window.AuSu.radius.subscribeRadius();
   window.AuSu.watch.subscribeWatch();
   window.AuSu.vehicules.subscribeVehicules();
   window.AuSu.location.subscribeLocation();
 
-  window.AuSu.alarm.getAlarm();
+  window.AuSu.radius.getRadius();
   window.AuSu.watch.getWatch();
   window.AuSu.location.sendLocation();
   window.AuSu.sw.initSw();

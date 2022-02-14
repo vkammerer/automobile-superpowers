@@ -10,22 +10,6 @@ webpush.setVapidDetails(
 
 const pushOptions = { TTL: 15 };
 
-const sendAlarmNotification = userId => {
-  const user = store.getState().users[userId];
-  const sPromise = superPromise();
-  webpush.sendNotification(
-    user.pushAuth,
-    'Alarm set 29 minutes ago',
-    pushOptions
-  ).then(() => {
-    sPromise.resolve();
-  }, err => {
-    console.log('sendAlarmNotification err', err);
-    sPromise.reject(err);
-  });
-  return sPromise.promise;
-};
-
 const sendWatchNotification = userId => {
   const user = store.getState().users[userId];
   const sPromise = superPromise();
@@ -59,7 +43,6 @@ const sendVehiculeNotification = (userId, vehicule) => {
 };
 
 module.exports = {
-  sendAlarmNotification,
   sendWatchNotification,
   sendVehiculeNotification,
 };

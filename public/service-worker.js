@@ -9,7 +9,7 @@
     "/cached/scripts/moment.js",
     "/cached/scripts/redux-logger.js",
     "/cached/scripts/redux-observer.js",
-    "/cached/scripts/alarm.js",
+    "/cached/scripts/radius.js",
     "/cached/scripts/utils.js",
     "/cached/scripts/index.js",
     "/cached/scripts/location.js",

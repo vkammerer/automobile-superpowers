@@ -55,7 +55,10 @@ const getUserVehicules = userId => {
 const getNewClosestVehicule = userId => {
   const user = store.getState().users[userId];
   const closestVehicule = getUserVehicules(userId)[0];
-  if (user.notifiedVehicules.includes(closestVehicule.Name)) return null;
+  if (
+    user.notifiedVehicules.includes(closestVehicule.Name) ||
+    closestVehicule.distance > user.radius
+  ) return null;
   return closestVehicule;
 };
 

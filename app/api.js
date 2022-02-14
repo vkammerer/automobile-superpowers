@@ -27,25 +27,19 @@ const initApi = app => {
         res.json([]);
       });
   });
-  app.get('/api/alarm', (req, res) => {
+  app.get('/api/radius', (req, res) => {
     const user = store.getState().users[req.cookies.user];
-    res.json({ time: user.alarmTime });
+    res.json({ radius: user.radius });
   });
-  app.post('/api/alarm', (req, res) => {
-    const { active, pushAuth } = req.body;
-    const time = !active ? null : new Date();
+  app.post('/api/radius', (req, res) => {
+    const { radius } = req.body;
     store.dispatch({
-      type: 'PUSH_AUTH',
+      type: 'RADIUS',
       userId: req.cookies.user,
-      pushAuth,
-    });
-    store.dispatch({
-      type: 'ALARM_TIME',
-      userId: req.cookies.user,
-      time,
+      radius: parseInt(radius, 10),
     });
     const user = store.getState().users[req.cookies.user];
-    res.json({ time: user.alarmTime });
+    res.json({ radius: user.radius });
   });
   app.get('/api/vehicule', (req, res) => {
     const user = store.getState().users[req.cookies.user];
